@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
   Box,
   List,
   ListItemText,
   AppBar,
   Toolbar,
-  Typography,
   IconButton,
   Drawer,
   Collapse,
@@ -24,7 +23,7 @@ import {
   MenuRounded,
 } from '@mui/icons-material'
 import Contact from './Subcomponents/Contact'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import logo from '../../assets/images/websiteLogo.png'
 
 const MobileNavbar = ({ handleUrlLanguageChange, handleLogout }) => {

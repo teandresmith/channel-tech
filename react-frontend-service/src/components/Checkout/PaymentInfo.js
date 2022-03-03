@@ -28,7 +28,7 @@ const PaymentInfo = ({
 
   const [updateUser] = useUpdateUserMutation()
 
-  const [makeNewOrder, { data, isSuccess }] = useMakeNewOrderMutation()
+  const [makeNewOrder] = useMakeNewOrderMutation()
 
   const calculateCartTotal = () => {
     if (cart.length === 0) {

@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux'
 const Orders = ({ userQueryData }) => {
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.down('sm'))
-  const user = useSelector((state) => state.user.user)
+
   const language = useSelector((state) => state.language.language)
 
   return (
@@ -163,7 +163,6 @@ export default Orders
 
 const MobileOrderView = ({ userQueryData }) => {
   const language = useSelector((state) => state.language.language)
-  const user = useSelector((state) => state.user.user)
 
   return userQueryData.result.orders.map((order) => (
     <Box

@@ -30,10 +30,6 @@ const Filtered = () => {
   const products = useSelector((state) => state.product.value)
   const pagination = useSelector((state) => state.urlFilters.pagination)
 
-  // Pagination State
-
-  const [page, setPage] = useState(1)
-
   // Sort By MUI Menu Component Handlers/Functions
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
