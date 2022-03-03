@@ -1,0 +1,8 @@
+{
+  "short_name": "Golang Ecommerce",
+  "name": "This is a Ecommerce website that is built with React.js and Golang.",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
