@@ -76,5 +76,5 @@ cookie. Due to the cookie not be accessible via Javascript,
 the token cookie is sent with each additional request that requires
 a token to access.
 
-Additional details such as usertype and an uuid to assist with 
+Additional details such as usertype and an uuid are also stored within the JWT to assist with 
 authorization within the Gin-Gonic Backend API.
