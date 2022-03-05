@@ -8,7 +8,7 @@ import { useUpdateUserMutation } from '../../redux/services/userAPI'
 import { setUser } from '../../redux/states/user'
 import CustomAlert from '../CustomMUI/CustomAlert'
 
-const PersonalInfo = ({ userQueryData }) => {
+const PersonalInfo = ({ userQueryData, headers }) => {
   const methods = useForm()
   const [message, setMessage] = useState('')
 
@@ -44,7 +44,11 @@ const PersonalInfo = ({ userQueryData }) => {
       delete changeData.Password
     }
 
-    updateUser({ user: changeData, userID: userQueryData.result.userId })
+    updateUser({
+      user: changeData,
+      userID: userQueryData.result.userId,
+      headers: headers,
+    })
     dispatch(
       setUser({
         user: {

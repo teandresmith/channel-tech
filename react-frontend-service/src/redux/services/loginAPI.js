@@ -4,7 +4,6 @@ export const loginAPI = createApi({
   reducerPath: 'loginAPI',
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_JWT_DOMAIN,
-    credentials: 'include',
   }),
   endpoints: (build) => ({
     register: build.mutation({

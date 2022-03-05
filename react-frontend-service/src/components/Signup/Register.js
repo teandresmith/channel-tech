@@ -8,6 +8,7 @@ import ReactHookFormTextField from '../CustomInputs/ReactHookFormTextField'
 import Loading from '../Loading'
 import { useRegisterMutation } from '../../redux/services/loginAPI'
 import { setUser } from '../../redux/states/user'
+import Cookies from 'js-cookie'
 
 const Register = () => {
   const methods = useForm()
@@ -36,6 +37,13 @@ const Register = () => {
           user: data.result,
         })
       )
+
+      const thirtyMinutes = 1 / 48
+      const threeHours = 1 / 20
+      Cookies.set('Token', data.result.token, { expires: thirtyMinutes })
+      Cookies.set('RefreshToken', data.result.refreshToken, {
+        expires: threeHours,
+      })
 
       const dataCopy = {
         firstName: data.result.firstName,

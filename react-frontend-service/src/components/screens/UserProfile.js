@@ -22,6 +22,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useGetUserByIDQuery } from '../../redux/services/userAPI'
 import ServerError from './ServerError'
 import Loading from '../Loading'
+import Cookies from 'js-cookie'
 
 const UserProfile = () => {
   const [activeTab, setActiveTab] = useState(0)
@@ -30,11 +31,16 @@ const UserProfile = () => {
   const params = useParams('userid')
   const navigate = useNavigate()
 
+  const headers = {
+    token: Cookies.get('Token'),
+    refreshToken: Cookies.get('RefreshToken'),
+  }
+
   const {
     data: userInfo,
     isLoading,
     error,
-  } = useGetUserByIDQuery(params.userid)
+  } = useGetUserByIDQuery({ userID: params.userid, headers: headers })
 
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.down('md'))
@@ -60,9 +66,9 @@ const UserProfile = () => {
   const displayActiveTab = () => {
     switch (activeTab) {
       case 0:
-        return <PersonalInfo userQueryData={userInfo} />
+        return <PersonalInfo userQueryData={userInfo} headers={headers} />
       case 1:
-        return <ShippingAddress userQueryData={userInfo} />
+        return <ShippingAddress userQueryData={userInfo} headers={headers} />
       case 2:
         return <Orders userQueryData={userInfo} />
       default:

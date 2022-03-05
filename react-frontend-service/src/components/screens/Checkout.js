@@ -7,6 +7,7 @@ import Loading from '../Loading'
 
 import { useSelector } from 'react-redux'
 import { useGetUserByIDQuery } from '../../redux/services/userAPI'
+import Cookies from 'js-cookie'
 
 const Checkout = () => {
   const steps = ['Shipping Info', 'Payment Info', 'Confirmation']
@@ -22,7 +23,15 @@ const Checkout = () => {
 
   const user = useSelector((state) => state.user.user)
 
-  const { data, isLoading, error } = useGetUserByIDQuery(user.userId)
+  const headers = {
+    token: Cookies.get('Token'),
+    refreshToken: Cookies.get('RefreshToken'),
+  }
+
+  const { data, isLoading, error } = useGetUserByIDQuery({
+    userID: user.userId,
+    headers: headers,
+  })
 
   const setActivePage = () => {
     switch (activeStep) {
@@ -39,6 +48,7 @@ const Checkout = () => {
             incrementActiveStep={incrementActiveStep}
             decrementActiveStep={decrementActiveStep}
             userQueryData={error ? {} : data}
+            headers={headers}
           />
         )
       case 2:

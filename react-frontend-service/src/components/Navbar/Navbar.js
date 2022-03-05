@@ -30,6 +30,7 @@ import { changeLanguage } from '../../redux/states/languageState'
 import { setSubFilters } from '../../redux/states/urlFilters'
 import { logout } from '../../redux/states/user'
 import logo from '../../assets/images/websiteLogo.png'
+import Cookies from 'js-cookie'
 
 const Navbar = () => {
   const [profileAnchorEl, setProfileAnchorEl] = useState(null)
@@ -81,6 +82,8 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem('user')
     navigate('/')
+    Cookies.remove('Token')
+    Cookies.remove('RefreshToken')
 
     dispatch(logout())
   }

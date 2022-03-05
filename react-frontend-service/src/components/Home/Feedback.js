@@ -18,7 +18,6 @@ const Feedback = () => {
   const methods = useForm()
 
   const onSubmit = (data) => {
-    console.log(data)
     methods.setValue('name', '')
     methods.setValue('email', '')
     methods.setValue('feedback', '')

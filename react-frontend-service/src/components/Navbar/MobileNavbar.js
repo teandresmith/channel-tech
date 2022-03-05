@@ -158,7 +158,18 @@ const MobileNavbar = ({ handleUrlLanguageChange, handleLogout }) => {
                 color='inherit'
                 size='small'
               >
-                <Badge badgeContent={cart.length} color='secondary'>
+                <Badge
+                  badgeContent={
+                    cart.length === 0
+                      ? 0
+                      : Object.values(cart).reduce(
+                          (previousValue, currentValue) =>
+                            previousValue + currentValue.quantity,
+                          0
+                        )
+                  }
+                  color='secondary'
+                >
                   <ShoppingCart />
                 </Badge>
               </IconButton>

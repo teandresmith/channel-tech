@@ -7,20 +7,20 @@ export const userAPI = createApi({
   }),
   endpoints: (build) => ({
     getUserByID: build.query({
-      query: (userID) => ({
+      query: ({ userID, headers }) => ({
         url: `/users/${userID}`,
         method: 'GET',
-        credentials: 'include',
+        headers: headers,
       }),
       providesTags: ['User'],
     }),
 
     updateUser: build.mutation({
-      query: ({ user, userID }) => ({
+      query: ({ user, userID, headers }) => ({
         url: `/users/${userID}`,
         method: 'PATCH',
         body: user,
-        credentials: 'include',
+        headers: headers,
       }),
       invalidatesTags: ['User'],
     }),

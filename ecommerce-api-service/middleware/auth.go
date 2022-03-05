@@ -10,21 +10,24 @@ import (
 
 func Authentication() gin.HandlerFunc{
 	return func(c *gin.Context) {
+
+		token := c.GetHeader("token")
+		refreshToken := c.GetHeader("refreshToken")
 		
-		token, _ := c.Request.Cookie("Token")
-		refreshToken, _ := c.Request.Cookie("RefreshToken")
+		// token, _ := c.Request.Cookie("Token")
+		// refreshToken, _ := c.Request.Cookie("RefreshToken")
 		var tokenString string
 
-		if token == nil {
-			if refreshToken == nil {
+		if token == "" {
+			if refreshToken == "" {
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 					"message": "No Tokens Provided",
 				})
 				return
 			}
-			tokenString = refreshToken.Value
+			tokenString = refreshToken
 		} else {
-			tokenString = token.Value
+			tokenString = token
 		}
 
 		

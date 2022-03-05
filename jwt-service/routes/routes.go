@@ -121,7 +121,6 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		Value: token,
 		Expires: time.Now().Local().Add(20*time.Minute),
 		MaxAge: 20*60,
-		HttpOnly: true,
 		SameSite: http.SameSiteNoneMode,
 		Secure: true,
 	}
@@ -132,7 +131,6 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		Value: refreshToken,
 		Expires: time.Now().Local().Add(3*time.Hour),
 		MaxAge: 3600*3,
-		HttpOnly: true,
 		SameSite: http.SameSiteNoneMode,
 		Secure: true,
 	}
@@ -207,7 +205,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		Value: token,
 		Expires: time.Now().Local().Add(20*time.Minute),
 		MaxAge: 20*60,
-		HttpOnly: true,
 		SameSite: http.SameSiteNoneMode,
 		Secure: true,
 	}
@@ -218,7 +215,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		Value: refreshToken,
 		Expires: time.Now().Local().Add(3*time.Hour),
 		MaxAge: 3600*3,
-		HttpOnly: true,
 		SameSite: http.SameSiteNoneMode,
 		Secure: true,
 	}

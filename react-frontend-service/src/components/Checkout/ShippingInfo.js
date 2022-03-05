@@ -25,7 +25,6 @@ const ShippingInfo = ({ incrementActiveStep, userQueryData }) => {
   )
 
   const onSubmit = (data) => {
-    console.log(data)
     dispatch(
       setShippingInfo({
         shippingInfo: data,

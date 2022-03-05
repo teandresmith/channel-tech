@@ -21,6 +21,7 @@ const PaymentInfo = ({
   decrementActiveStep,
   incrementActiveStep,
   userQueryData,
+  headers,
 }) => {
   const cart = useSelector((state) => state.cart.value)
   const shippingInfo = useSelector((state) => state.checkout.shippingInfo)
@@ -99,6 +100,7 @@ const PaymentInfo = ({
             orders: orders,
           },
           userID: userQueryData.result.userId,
+          headers: headers,
         })
       }
 

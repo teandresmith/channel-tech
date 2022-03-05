@@ -9,7 +9,7 @@ import { useUpdateUserMutation } from '../../redux/services/userAPI'
 import CustomAlert from '../CustomMUI/CustomAlert'
 import { setUser } from '../../redux/states/user'
 
-const ShippingAddress = ({ userQueryData }) => {
+const ShippingAddress = ({ userQueryData, headers }) => {
   const methods = useForm()
 
   const countries = ['USA', 'Japan']
@@ -47,7 +47,11 @@ const ShippingAddress = ({ userQueryData }) => {
       },
     }
 
-    updateUser({ user: changeData, userID: userQueryData.result.userId })
+    updateUser({
+      user: changeData,
+      userID: userQueryData.result.userId,
+      headers: headers,
+    })
 
     dispatch(
       setUser({
