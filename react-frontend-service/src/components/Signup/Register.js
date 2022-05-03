@@ -45,11 +45,11 @@ const Register = () => {
         })
       )
 
-      const thirtyMinutes = 1 / 48
-      const threeHours = 1 / 20
+      const thirtyMinutes = new Date(new Date().getTime() + 15 * 60 * 1000)
+      const oneHour = new Date(new Date().getTime() + 60 * 60 * 1000)
       Cookies.set('Token', data.result.token, { expires: thirtyMinutes })
       Cookies.set('RefreshToken', data.result.refreshToken, {
-        expires: threeHours,
+        expires: oneHour,
       })
 
       const dataCopy = {
