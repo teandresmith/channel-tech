@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { CssBaseline } from '@mui/material'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import {
@@ -15,19 +15,26 @@ import {
   PageNotFound,
 } from './components'
 import ScrollToTop from './components/ScrollToTop'
-import { useGetAllProductsQuery } from './redux/services/productAPI'
+import { useGetAllProductsMutation } from './redux/services/productAPI'
 import Loading from './components/Loading'
 import { useSelector } from 'react-redux'
 
 const App = () => {
   const language = useSelector((state) => state.language.language)
-  const { data, isLoading } = useGetAllProductsQuery(language)
+  const [getAllProducts, { data, isLoading, isUninitialized }] =
+    useGetAllProductsMutation()
+
+  console.log(data)
+
+  useEffect(() => {
+    getAllProducts(language)
+  }, [language])
 
   return (
     <>
       <CssBaseline />
 
-      {isLoading ? (
+      {isUninitialized || isLoading ? (
         <Loading open={isLoading} />
       ) : (
         <>

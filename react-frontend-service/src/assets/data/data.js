@@ -180,8 +180,8 @@ export const englishLinks = {
           url: `/shop?category=Entertainment&subcategory=Sound Systems&lang=en`,
         },
         {
-          category: 'Mobile Devices',
-          url: `/shop?category=Phones&subcategory=Mobile Devices&lang=en`,
+          category: 'Mobile Phones',
+          url: `/shop?category=Phones&subcategory=Mobile Phones&lang=en`,
         },
         {
           category: 'TVs',
@@ -247,7 +247,7 @@ export const japaneseLinks = {
       },
       Phones: {
         電話: 'Phones',
-        携帯電話: 'Mobile Devices',
+        携帯電話: 'Mobile Phones',
         ケース: 'Cases',
         電気電子: 'Chargers',
         アクセサリー: 'Accessories',
@@ -274,7 +274,7 @@ export const japaneseLinks = {
         },
         {
           category: 'パソコン',
-          url: `/shop?category=パソコン&subcategory=パソコン&lang=jp`,
+          url: `/shop?category=パソコン&subcategory=デスクトップ&lang=jp`,
         },
         {
           category: 'スピーカー',

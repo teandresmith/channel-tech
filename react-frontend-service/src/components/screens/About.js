@@ -42,7 +42,7 @@ const About = () => {
               development of software engineering skills for T. Smith,
               specifically in the ability to create a fullstack application. To
               take a deeper look into the application's code, please have a look
-              at *INSERT GITHUB LINK HERE*
+              at https://github.com/teandresmith/channel-tech
             </Typography>
           </Stack>
         </Box>

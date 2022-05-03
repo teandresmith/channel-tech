@@ -6,8 +6,11 @@ export const productAPI = createApi({
     baseUrl: `${process.env.REACT_APP_BACKEND_DOMAIN}/api`,
   }),
   endpoints: (build) => ({
-    getAllProducts: build.query({
-      query: (language) => `/products?lang=${language}`,
+    getAllProducts: build.mutation({
+      query: (language) => ({
+        url: `/products?lang=${language}`,
+        method: 'GET',
+      }),
       providesTags: ['Products'],
     }),
 
@@ -63,7 +66,7 @@ export const productAPI = createApi({
 })
 
 export const {
-  useGetAllProductsQuery,
+  useGetAllProductsMutation,
   useGetProductByIDQuery,
   useCreateReviewMutation,
   useCreateProductMutation,
