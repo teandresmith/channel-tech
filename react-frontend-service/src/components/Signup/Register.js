@@ -1,11 +1,18 @@
 import React, { useEffect } from 'react'
-import { Button, Box, Stack, Paper, useMediaQuery } from '@mui/material'
+import {
+  Button,
+  Box,
+  Stack,
+  Paper,
+  useMediaQuery,
+  Backdrop,
+  CircularProgress,
+} from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTheme } from '@mui/system'
 import { useSelector, useDispatch } from 'react-redux'
 import ReactHookFormTextField from '../CustomInputs/ReactHookFormTextField'
-import Loading from '../Loading'
 import { useRegisterMutation } from '../../redux/services/loginAPI'
 import { setUser } from '../../redux/states/user'
 import Cookies from 'js-cookie'
@@ -56,7 +63,12 @@ const Register = () => {
   }, [data, dispatch, navigate])
   return (
     <>
-      <Loading open={isLoading} />
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color='secondary' />
+      </Backdrop>
       <Box component='div' sx={{ height: '80vh' }}>
         <Box
           component='div'

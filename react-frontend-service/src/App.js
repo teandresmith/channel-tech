@@ -24,8 +24,6 @@ const App = () => {
   const [getAllProducts, { data, isLoading, isUninitialized }] =
     useGetAllProductsMutation()
 
-  console.log(data)
-
   useEffect(() => {
     getAllProducts(language)
   }, [language])

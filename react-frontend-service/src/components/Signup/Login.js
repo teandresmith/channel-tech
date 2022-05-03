@@ -1,5 +1,15 @@
 import React, { useEffect } from 'react'
-import { Box, Button, Stack, Paper, useMediaQuery } from '@mui/material'
+import {
+  Box,
+  Button,
+  Stack,
+  Paper,
+  useMediaQuery,
+  Backdrop,
+  CircularProgress,
+  Typography,
+  Alert,
+} from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTheme } from '@mui/system'
@@ -37,6 +47,8 @@ const Login = () => {
         })
       )
 
+      console.log(data)
+
       const thirtyMinutes = 1 / 48
       const threeHours = 1 / 20
       Cookies.set('Token', data.result.token, { expires: thirtyMinutes })
@@ -56,7 +68,12 @@ const Login = () => {
 
   return (
     <>
-      <Loading open={isLoading} />
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color='secondary' />
+      </Backdrop>
       <Box component='div' sx={{ height: '80vh' }}>
         <Box
           component='div'
@@ -71,7 +88,7 @@ const Login = () => {
           <Box component='div'>
             <Paper elevation={5} sx={{ backgroundColor: 'lavender' }}>
               <form
-                style={{ padding: 15 }}
+                style={{ padding: '15px' }}
                 onSubmit={methods.handleSubmit(onSubmit)}
               >
                 <Stack direction='column' spacing={2}>
