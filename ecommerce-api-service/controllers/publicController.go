@@ -13,6 +13,7 @@ import (
 	"github.com/teandresmith/channel-tech/ecommerce-api-service/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -23,6 +24,7 @@ import (
 		GetAllProducts()
 		GetProductByID()
 		QueryProductByParams() => This is unfinished, but will be implemented in the future to provided server side pagination and filtering.
+		GetProductByName()
 		CreateReview()
 
 		Order Routes
@@ -95,6 +97,43 @@ func GetProductByID() gin.HandlerFunc{
 		c.JSON(http.StatusOK, Response{
 			Message: "Product Successfully fetched",
 			Result: product,
+		})
+	}
+}
+
+func GetProductByName() gin.HandlerFunc{
+	return func(c *gin.Context) {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+
+		name := c.Param("name")
+		language := c.Query("lang")
+
+		matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "name", Value: name}, {Key: "language", Value: language}}}}
+		// matchStage2 := bson.D{{Key: "$match", Value: bson.D{}}}
+
+		showInfoCurser, err := productCollection.Aggregate(ctx, mongo.Pipeline{matchStage})
+		defer cancel()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, Error{
+				Message: "There was an error while querying the product collection",
+				Error: err.Error(),
+			})
+			return
+		}
+
+		var products []bson.M
+		if err = showInfoCurser.All(ctx, &products); err != nil {
+			c.JSON(http.StatusInternalServerError, Error{
+				Message: "There was an error while iterating through the query results",
+				Error: err.Error(),
+			})
+			return
+		}
+
+
+		c.JSON(http.StatusOK, Response{
+			Message: "Product Successfully fetched",
+			Result: products,
 		})
 	}
 }

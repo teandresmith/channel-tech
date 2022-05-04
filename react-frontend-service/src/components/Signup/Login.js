@@ -7,8 +7,6 @@ import {
   useMediaQuery,
   Backdrop,
   CircularProgress,
-  Typography,
-  Alert,
 } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
@@ -17,7 +15,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import ReactHookFormTextField from '../CustomInputs/ReactHookFormTextField'
 import { useLoginMutation } from '../../redux/services/loginAPI'
 import { setUser } from '../../redux/states/user'
-import Loading from '../Loading'
 import Cookies from 'js-cookie'
 
 const Login = () => {

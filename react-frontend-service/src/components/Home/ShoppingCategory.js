@@ -60,7 +60,7 @@ const CustomCategory = ({ data }) => {
       case 'スピーカー':
         return <SpeakerGroup />
 
-      case 'Mobile Devices':
+      case 'Mobile Phones':
       case '携帯電話':
         return <PhoneIphone />
 

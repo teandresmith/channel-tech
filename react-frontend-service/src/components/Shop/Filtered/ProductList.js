@@ -28,7 +28,7 @@ const ProductList = () => {
           <Grid item xs={6} sm={4} md={3} key={item.productId}>
             <Stack
               component={Link}
-              to={`/products/${item.productId}`}
+              to={`/products/${item.name}`}
               direction='column'
               sx={{
                 textDecoration: 'none',

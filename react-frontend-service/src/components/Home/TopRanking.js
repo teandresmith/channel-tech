@@ -30,7 +30,7 @@ const TopRanking = ({ title, topRanking }) => {
           {matches
             ? topRanking.slice(0, 3).map((value) => (
                 <Grid item xs={'auto'} key={value.productId}>
-                  <Box component={Link} to={`/products/${value.productId}`}>
+                  <Box component={Link} to={`/products/${value.name}`}>
                     <Box
                       component='img'
                       src={value.image}
@@ -45,7 +45,7 @@ const TopRanking = ({ title, topRanking }) => {
               ))
             : topRanking.map((value) => (
                 <Grid item xs={'auto'} key={value.productId}>
-                  <Box component={Link} to={`/products/${value.productId}`}>
+                  <Box component={Link} to={`/products/${value.name}`}>
                     <Box
                       component='img'
                       src={value.image}

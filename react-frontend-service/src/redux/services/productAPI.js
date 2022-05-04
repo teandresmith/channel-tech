@@ -14,8 +14,22 @@ export const productAPI = createApi({
       providesTags: ['Products'],
     }),
 
+    // getProductByName: build.mutation({
+    //   query: ({ name, language }) => ({
+    //     url: `/products/${name}?lang=${language}`,
+    //     method: 'GET',
+    //   }),
+    //   invalidatesTags: ['Products'],
+    // }),
+
     getProductByID: build.query({
       query: (productID) => `/products/${productID}`,
+      providesTags: ['Products'],
+    }),
+
+    getProductByName: build.query({
+      query: ({ name, language }) =>
+        `/products/product/${name}?lang=${language}`,
       providesTags: ['Products'],
     }),
 
@@ -68,6 +82,7 @@ export const productAPI = createApi({
 export const {
   useGetAllProductsMutation,
   useGetProductByIDQuery,
+  useGetProductByNameQuery,
   useCreateReviewMutation,
   useCreateProductMutation,
   useDeleteProductMutation,

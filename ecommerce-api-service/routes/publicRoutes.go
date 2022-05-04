@@ -12,6 +12,7 @@ func PublicRoutes(incomingRoutes *gin.Engine) {
 	// All Product Routes are readable by the User with no need of providing an access token
 	incomingRoutes.GET("/api/products", controllers.GetAllProducts())
 	incomingRoutes.GET("/api/products/:productid", controllers.GetProductByID())
+	incomingRoutes.GET("/api/products/product/:name", controllers.GetProductByName())
 	incomingRoutes.GET("/api/products/query", controllers.QueryProductsByParams())
 	incomingRoutes.PATCH("/api/products/:productid/review", controllers.CreateReview())
 

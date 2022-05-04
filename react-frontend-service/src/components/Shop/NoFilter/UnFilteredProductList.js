@@ -35,7 +35,7 @@ const UnFilteredProductList = ({ data }) => {
           <Grid item xs={6} sm={4} md={3} key={`${item.name}+${item.price}`}>
             <Stack
               component={Link}
-              to={`/products/${item.productId}`}
+              to={`/products/${item.name}`}
               direction='column'
               sx={{
                 textDecoration: 'none',
