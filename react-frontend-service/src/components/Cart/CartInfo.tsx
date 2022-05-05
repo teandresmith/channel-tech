@@ -1,13 +1,11 @@
 import React from 'react'
 import { Stack, Box, Typography, Divider, Button } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { useState } from 'react'
-import { useEffect } from 'react'
+import { useAppSelector } from '../../hooks/reduxHooks'
 
 const CartInfo = () => {
-  const cart = useSelector((state) => state.cart.value)
-  const language = useSelector((state) => state.language.language)
+  const cart = useAppSelector((state) => state.cart.value)
+  const language = useAppSelector((state) => state.language.language)
 
   const calculateCartTotal = () => {
     if (cart.length === 0) {
@@ -22,15 +20,15 @@ const CartInfo = () => {
     return total
   }
 
-  const [total, setTotal] = useState(0)
+  const [total, setTotal] = React.useState(0)
 
-  const [shippingPrice, setShippingPrice] = useState(0)
+  const [shippingPrice, setShippingPrice] = React.useState(0)
 
-  const addShipping = (num1, num2) => {
+  const addShipping = (num1: number, num2: number) => {
     return num1 + num2
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     setTotal(calculateCartTotal())
     if (calculateCartTotal() > 500 || cart.length === 0) {
       setShippingPrice(0)
