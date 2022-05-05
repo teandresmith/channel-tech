@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import {
   Typography,
@@ -11,16 +11,24 @@ import {
   DialogContent,
   DialogContentText,
 } from '@mui/material'
-import ReactHookFormTextField from '../CustomInputs/ReactHookFormTextField'
+
+import { MHFTextField } from 'mui-hook-form-mhf'
+
+type FormData = {
+  name: string
+  email: string
+  feedback: string
+}
 
 const Feedback = () => {
-  const [open, setOpen] = useState(false)
-  const methods = useForm()
+  const [open, setOpen] = React.useState(false)
+  const methods = useForm<FormData>()
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormData) => {
     methods.setValue('name', '')
     methods.setValue('email', '')
     methods.setValue('feedback', '')
+    console.log(data)
     setOpen(false)
   }
 
@@ -59,7 +67,7 @@ const Feedback = () => {
                   Please help us improve by filling out the form below. We
                   appreciate all feedback from our users!
                 </DialogContentText>
-                <ReactHookFormTextField
+                <MHFTextField
                   defaultValue={'Anon'}
                   name='name'
                   control={methods.control}
@@ -70,7 +78,7 @@ const Feedback = () => {
                   fullWidth
                   variant='outlined'
                 />
-                <ReactHookFormTextField
+                <MHFTextField
                   defaultValue={''}
                   name='email'
                   control={methods.control}
@@ -79,9 +87,10 @@ const Feedback = () => {
                   id='email'
                   required
                   fullWidth
+                  type='email'
                   variant='outlined'
                 />
-                <ReactHookFormTextField
+                <MHFTextField
                   defaultValue={''}
                   name='feedback'
                   control={methods.control}

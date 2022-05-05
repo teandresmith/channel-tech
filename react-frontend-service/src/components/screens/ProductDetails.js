@@ -12,7 +12,7 @@ const ProductDetails = () => {
   const params = useParams('name')
 
   const language = useSelector((state) => state.language.language)
-  console.log(language)
+
   const { data, isLoading, error, refetch } = useGetProductByNameQuery({
     name: params.name,
     language,

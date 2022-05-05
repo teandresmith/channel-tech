@@ -2,8 +2,14 @@ import React from 'react'
 import { Typography, Box, Grid, useMediaQuery } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { Link } from 'react-router-dom'
+import { Product } from '../../redux/types/Types'
 
-const TopRanking = ({ title, topRanking }) => {
+type TopRankingProps = {
+  title: string
+  topRanking: Array<Product>
+}
+
+const TopRanking = ({ title, topRanking }: TopRankingProps) => {
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.down('sm'))
 
@@ -29,11 +35,11 @@ const TopRanking = ({ title, topRanking }) => {
         >
           {matches
             ? topRanking.slice(0, 3).map((value) => (
-                <Grid item xs={'auto'} key={value.productId}>
-                  <Box component={Link} to={`/products/${value.name}`}>
+                <Grid item xs={'auto'} key={value?.productId}>
+                  <Box component={Link} to={`/products/${value?.name}`}>
                     <Box
                       component='img'
-                      src={value.image}
+                      src={value?.image}
                       sx={{
                         width: { xs: 80 },
                         objectFit: 'contain',
@@ -44,11 +50,11 @@ const TopRanking = ({ title, topRanking }) => {
                 </Grid>
               ))
             : topRanking.map((value) => (
-                <Grid item xs={'auto'} key={value.productId}>
-                  <Box component={Link} to={`/products/${value.name}`}>
+                <Grid item xs={'auto'} key={value?.productId}>
+                  <Box component={Link} to={`/products/${value?.name}`}>
                     <Box
                       component='img'
-                      src={value.image}
+                      src={value?.image}
                       sx={{
                         width: { sm: 100, md: 150, lg: 200 },
                         objectFit: 'contain',

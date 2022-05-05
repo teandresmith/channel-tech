@@ -1,13 +1,9 @@
 import React from 'react'
-import { Backdrop, CircularProgress, Box, Typography } from '@mui/material'
+import { CircularProgress, Box } from '@mui/material'
 
-const Loading = ({ open }) => {
+const Loading = () => {
   return (
     <>
-      {/* <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={open}
-      > */}
       <Box
         component='div'
         sx={{
@@ -19,8 +15,6 @@ const Loading = ({ open }) => {
       >
         <CircularProgress color='secondary' />
       </Box>
-
-      {/* </Backdrop> */}
     </>
   )
 }

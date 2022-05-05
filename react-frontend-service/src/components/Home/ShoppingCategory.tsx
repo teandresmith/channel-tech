@@ -9,10 +9,10 @@ import {
   ShoppingBag,
 } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../hooks/reduxHooks'
 
 const ShoppingCategory = () => {
-  const languageData = useSelector((state) => state.language.languageData)
+  const languageData = useAppSelector((state) => state.language.languageData)
 
   return (
     <>
@@ -45,8 +45,12 @@ const ShoppingCategory = () => {
   )
 }
 
-const CustomCategory = ({ data }) => {
-  const setIcon = (iconString) => {
+type CustomCategoryProps = {
+  data: { category: string; url: string }
+}
+
+const CustomCategory = ({ data }: CustomCategoryProps) => {
+  const setIcon = (iconString: string) => {
     switch (iconString) {
       case 'Laptops':
       case 'ノートパソコン':
@@ -88,7 +92,7 @@ const CustomCategory = ({ data }) => {
       >
         <Box
           component={Link}
-          to={data.url}
+          to={data?.url}
           sx={{
             textDecoration: 'none',
             color: 'black',
@@ -105,13 +109,13 @@ const CustomCategory = ({ data }) => {
               p: { xs: 1, sm: 2 },
             }}
           >
-            {setIcon(data.category)}
+            {setIcon(data?.category)}
             <Typography
               variant='h6'
               fontSize={{ xs: 14, sm: 18, md: 20 }}
               sx={{ pl: 1 }}
             >
-              {data.category}
+              {data?.category}
             </Typography>
           </Box>
         </Box>

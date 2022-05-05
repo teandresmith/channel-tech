@@ -1,17 +1,20 @@
 import React from 'react'
 import { Box, Grid, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../hooks/reduxHooks'
 
-const FeaturedNewest = ({ headers, info }) => {
+type FeaturedNewestProps = {
+  headers: Array<string>
+  data?: { image: string }
+}
+
+const FeaturedNewest = ({ headers }: FeaturedNewestProps) => {
   const data = [
     {
-      title: 'Featured Items',
       image:
         'https://images.unsplash.com/photo-1543069190-9d380c458bc2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80',
     },
     {
-      title: 'Newest Items',
       image:
         'https://images.unsplash.com/photo-1515968004492-e6224002d7db?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1134&q=80',
     },
@@ -34,8 +37,13 @@ const FeaturedNewest = ({ headers, info }) => {
   )
 }
 
-const Template = ({ header, data }) => {
-  const language = useSelector((state) => state.language.language)
+type TemplateProps = {
+  header: string
+  data?: { image: string }
+}
+
+const Template = ({ header, data }: TemplateProps) => {
+  const language = useAppSelector((state) => state.language.language)
   return (
     <>
       <Typography variant='h6' fontSize={{ md: 24 }}>
@@ -51,7 +59,7 @@ const Template = ({ header, data }) => {
       >
         <Box
           component='img'
-          src={data.image}
+          src={data?.image}
           sx={{
             height: { xs: 300, sm: 600 },
             objectFit: 'cover',

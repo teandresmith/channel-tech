@@ -1,9 +1,9 @@
 import { Container, Typography, Box, Stack } from '@mui/material'
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../hooks/reduxHooks'
 
 const About = () => {
-  const language = useSelector((state) => state.language.language)
+  const language = useAppSelector((state) => state.language.language)
 
   return (
     <>

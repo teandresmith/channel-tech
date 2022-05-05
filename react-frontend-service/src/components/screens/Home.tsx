@@ -7,10 +7,15 @@ import ShoppingCategory from '../Home/ShoppingCategory'
 import FeaturedNewest from '../Home/FeaturedNewest'
 import TopRanking from '../Home/TopRanking'
 import Carousel from '../Home/Carousel'
-import { useSelector } from 'react-redux'
+import { Product } from '../../redux/types/Types'
+import { useAppSelector } from '../../hooks/reduxHooks'
 
-const Home = ({ data }) => {
-  const language = useSelector((state) => state.language.language)
+type HomeProp = {
+  data: Array<Product>
+}
+
+const Home = ({ data }: HomeProp) => {
+  const language = useAppSelector((state) => state.language.language)
 
   let randomNumber = Math.floor(Math.random() * data.length - 5 + 1)
 

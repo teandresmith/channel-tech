@@ -101,7 +101,103 @@ export const prefectureList = [
   '山梨県',
 ]
 
-export const englishLinks = {
+export interface StaticData {
+  Shop: {
+    Computers: Array<string>
+    Phones: Array<string>
+    Entertainment: Array<string>
+    Products: Array<string>
+    AllProductCategories: Array<string>
+    Categories: Array<string>
+    SubFilters: Array<string>
+    Prices: Array<number>
+    Brands: Array<string>
+    DataMap: EnglishDataMap | JapaneseDataMap
+    Home: {
+      ShoppingCategories: Array<{ category: string; url: string }>
+    }
+  }
+}
+
+interface EnglishDataMap {
+  Computers: {
+    Computers: string
+    Desktops: string
+    Laptops: string
+    Monitors: string
+    Accessories: string
+    'Shop All': string
+  }
+  Entertainment: {
+    Entertainment: string
+    TVs: string
+    Projectors: string
+    'Sound Systems': string
+    'Streaming Devices': string
+    'Shop All': string
+  }
+  Phones: {
+    Phones: string
+    'Mobile Phones': string
+    Cases: string
+    Chargers: string
+    Accessories: string
+    'Shop All': string
+  }
+  Products: {
+    'Featured Products': string
+    'Top Rated Products': string
+    'Newest Products': string
+  }
+  Prices: {
+    100: string
+    250: string
+    500: string
+    1000: string
+    1500: string
+  }
+}
+
+interface JapaneseDataMap {
+  Computers: {
+    パソコン: string
+    デスクトップ: string
+    ノートパソコン: string
+    画面: string
+    アクセサリー: string
+    'Shop All': string
+  }
+  Entertainment: {
+    電気機器: string
+    テレビ: string
+    プロジェクター: string
+    'Streaming Devices': string
+    スピーカー: string
+    'Shop All': string
+  }
+  Phones: {
+    電話: string
+    携帯電話: string
+    ケース: string
+    電気電子: string
+    アクセサリー: string
+    'Shop All': string
+  }
+  Products: {
+    おすすめ商品: string
+    新しい商品: string
+    一番商品: string
+  }
+  Prices: {
+    10000: string
+    25000: string
+    50000: string
+    100000: string
+    150000: string
+  }
+}
+
+export const englishLinks: StaticData = {
   Shop: {
     Computers: ['Desktops', 'Laptops', 'Monitors', 'Accessories', 'Shop All'],
     Phones: ['Mobile Phones', 'Cases', 'Chargers', 'Accessories', 'Shop All'],

@@ -59,7 +59,7 @@ const Footer = () => {
                 color: 'white',
               }}
             >
-              2022 Golang
+              2022 channeltech
             </Typography>
           </div>
         </Box>

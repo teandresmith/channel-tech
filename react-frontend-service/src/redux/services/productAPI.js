@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { Product } from '../types/Types'
 
 export const productAPI = createApi({
   reducerPath: 'productAPI',
@@ -13,14 +14,6 @@ export const productAPI = createApi({
       }),
       providesTags: ['Products'],
     }),
-
-    // getProductByName: build.mutation({
-    //   query: ({ name, language }) => ({
-    //     url: `/products/${name}?lang=${language}`,
-    //     method: 'GET',
-    //   }),
-    //   invalidatesTags: ['Products'],
-    // }),
 
     getProductByID: build.query({
       query: (productID) => `/products/${productID}`,

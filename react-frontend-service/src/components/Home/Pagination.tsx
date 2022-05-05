@@ -1,6 +1,12 @@
 import React from 'react'
 
-const Pagination = ({ count, activeStep, setActiveStep }) => {
+type PaginationProps = {
+  count: number
+  activeStep: number
+  setActiveStep: React.Dispatch<React.SetStateAction<number>>
+}
+
+const Pagination = ({ count, activeStep, setActiveStep }: PaginationProps) => {
   const styles = {
     pagination: {
       borderRadius: '50%',
@@ -13,7 +19,7 @@ const Pagination = ({ count, activeStep, setActiveStep }) => {
     active: { backgroundColor: 'purple' },
   }
 
-  const list = (count, activeStep) => {
+  const list = (count: number, activeStep: number) => {
     const listValues = []
     for (var i = 0; i < count; i++) {
       listValues.push(i)
