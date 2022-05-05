@@ -1,52 +1,74 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm, FormProvider } from 'react-hook-form'
 import { Alert, Box, Button } from '@mui/material'
-import ReactHookFormTextField from '../CustomInputs/ReactHookFormTextField'
-import { useSelector, useDispatch } from 'react-redux'
+import { MHFTextField } from 'mui-hook-form-mhf'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
+
 import { useUpdateUserMutation } from '../../redux/services/userAPI'
 import { setUser } from '../../redux/states/user'
 import CustomAlert from '../CustomMUI/CustomAlert'
+import { User } from '../../redux/types/Types'
 
-const PersonalInfo = ({ userQueryData, headers }) => {
-  const methods = useForm()
-  const [message, setMessage] = useState('')
+type FormData = {
+  firstName: string
+  lastName: string
+  email: string
+  Password: string
+  confirmPassword: string
+}
 
-  const user = useSelector((state) => state.user.user)
+type PersonalInfoProps = {
+  userQueryData: User['user']
+  headers: { token?: string; refreshToken?: string }
+}
+
+const PersonalInfo = ({ userQueryData, headers }: PersonalInfoProps) => {
+  const methods = useForm<FormData>()
+  const [message, setMessage] = React.useState('')
+
+  const user = useAppSelector((state) => state.user.user)
   const [updateUser, { isSuccess }] = useUpdateUserMutation()
 
   const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
-  const onSubmit = (data) => {
-    if (!confirmPassword(data.password, data.confirmPassword)) {
+  const onSubmit = (data: FormData) => {
+    if (!confirmPassword(data?.Password, data?.confirmPassword)) {
       return
     }
 
     if (
-      data.firstName === userQueryData.result.firstName &&
-      data.lastName === userQueryData.result.lastName &&
-      data.email === userQueryData.result.email &&
-      data.Password === userQueryData.result.Password
+      data.firstName === userQueryData?.firstName &&
+      data.lastName === userQueryData?.lastName &&
+      data.email === userQueryData?.email &&
+      data.Password === userQueryData?.Password
     ) {
       return
     }
 
-    let changeData = {
+    interface Data {
+      firstName: string
+      lastName: string
+      email: string
+      Password?: string
+    }
+
+    let changeData: Data = {
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
-      Password: data.password,
+      Password: data.Password,
     }
 
     // if data.password === '' -> do not dispatch the password
-    if (data.password === '') {
-      delete changeData.Password
+    if (data.Password === '') {
+      delete changeData?.Password
     }
 
     updateUser({
       user: changeData,
-      userID: userQueryData.result.userId,
+      userID: userQueryData?.userId,
       headers: headers,
     })
     dispatch(
@@ -56,13 +78,13 @@ const PersonalInfo = ({ userQueryData, headers }) => {
           firstName: data.firstName,
           lastName: data.lastName,
           email: data.email,
-          Password: data.password,
+          Password: data?.Password,
         },
       })
     )
   }
 
-  const confirmPassword = (password, confirmPassword) => {
+  const confirmPassword = (password: string, confirmPassword: string) => {
     if (password !== confirmPassword) {
       setMessage('Password and Confirm Password fields do not match.')
       return false
@@ -72,8 +94,8 @@ const PersonalInfo = ({ userQueryData, headers }) => {
     return true
   }
 
-  useEffect(() => {
-    if (Object.keys(user).length === 0) {
+  React.useEffect(() => {
+    if (user === null) {
       navigate('/login')
     }
   }, [user, navigate])
@@ -105,8 +127,8 @@ const PersonalInfo = ({ userQueryData, headers }) => {
           sx={{ width: { xs: '100%', md: '70%' } }}
         >
           <FormProvider {...methods}>
-            <ReactHookFormTextField
-              defaultValue={userQueryData.result.firstName}
+            <MHFTextField
+              defaultValue={userQueryData?.firstName}
               name='firstName'
               control={methods.control}
               margin='dense'
@@ -116,8 +138,8 @@ const PersonalInfo = ({ userQueryData, headers }) => {
               color='secondary'
               required
             />
-            <ReactHookFormTextField
-              defaultValue={userQueryData.result.lastName}
+            <MHFTextField
+              defaultValue={userQueryData?.lastName}
               name='lastName'
               control={methods.control}
               margin='dense'
@@ -126,8 +148,8 @@ const PersonalInfo = ({ userQueryData, headers }) => {
               fullWidth
               color='secondary'
             />
-            <ReactHookFormTextField
-              defaultValue={userQueryData.result.email}
+            <MHFTextField
+              defaultValue={userQueryData?.email}
               name='email'
               control={methods.control}
               margin='dense'
@@ -138,7 +160,7 @@ const PersonalInfo = ({ userQueryData, headers }) => {
               type='email'
               required
             />
-            <ReactHookFormTextField
+            <MHFTextField
               defaultValue={''}
               name='password'
               control={methods.control}
@@ -149,7 +171,7 @@ const PersonalInfo = ({ userQueryData, headers }) => {
               type='password'
               color='secondary'
             />
-            <ReactHookFormTextField
+            <MHFTextField
               defaultValue={''}
               name='confirmPassword'
               control={methods.control}

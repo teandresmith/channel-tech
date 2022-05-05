@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Stack,
   Box,
@@ -14,14 +14,19 @@ import {
   MenuItem,
 } from '@mui/material'
 import { ExpandMore } from '@mui/icons-material'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { addToCart, deleteFromCart } from '../../redux/states/cart'
+import { Product } from '../../redux/types/Types'
 
-const ProductsInfo = ({ data }) => {
-  const [desiredQuantity, setDesiredQuantity] = useState(1)
+type ProductsInfoProps = {
+  data: Product
+}
 
-  const dispatch = useDispatch()
-  const cart = useSelector((state) => state.cart.value)
+const ProductsInfo = ({ data }: ProductsInfoProps) => {
+  const [desiredQuantity, setDesiredQuantity] = React.useState(1)
+
+  const dispatch = useAppDispatch()
+  const cart = useAppSelector((state) => state.cart.value)
 
   return (
     <>
@@ -46,7 +51,7 @@ const ProductsInfo = ({ data }) => {
             <Box component='div'>
               <Typography variant='h5'>{data.name}</Typography>
               <Typography variant='body1'>{data.brand}</Typography>
-              <Typography variant='subtitle1'>{data.subCategory}</Typography>
+              <Typography variant='subtitle1'>{data.subcategory}</Typography>
             </Box>
 
             <Box component='div' sx={{ pt: 2, pb: 2 }}>
@@ -65,7 +70,7 @@ const ProductsInfo = ({ data }) => {
                   id='desired-quantity-select'
                   value={desiredQuantity}
                   label='Quantity'
-                  onChange={(e) => setDesiredQuantity(e.target.value)}
+                  onChange={(e) => setDesiredQuantity(Number(e.target.value))}
                   sx={{ width: { xs: '30%', md: '40%' } }}
                 >
                   {Array.from(Array(data.quantityInStock).keys()).map(

@@ -6,12 +6,12 @@ import Reviews from '../ProductDetails/Reviews'
 import { useGetProductByNameQuery } from '../../redux/services/productAPI'
 import Loading from '../Loading'
 import ServerError from './ServerError'
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../hooks/reduxHooks'
 
 const ProductDetails = () => {
-  const params = useParams('name')
+  const params = useParams()
 
-  const language = useSelector((state) => state.language.language)
+  const language = useAppSelector((state) => state.language.language)
 
   const { data, isLoading, error, refetch } = useGetProductByNameQuery({
     name: params.name,
@@ -25,15 +25,13 @@ const ProductDetails = () => {
   return (
     <>
       {isLoading ? (
-        <Loading open={isLoading} />
-      ) : error ||
-        (data && Object.keys(data.result) === 0) ||
-        data?.results?.length === 0 ? (
+        <Loading />
+      ) : error || data?.results?.length === 0 ? (
         <ServerError />
       ) : (
-        <Container maxWidth='lg' sx={{}}>
-          <ProductsInfo data={data.result[0]} />
-          <Reviews data={data.result[0]} />
+        <Container maxWidth='lg'>
+          <ProductsInfo data={data?.result[0]} />
+          <Reviews data={data?.result[0]} />
         </Container>
       )}
     </>

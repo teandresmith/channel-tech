@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import {
   Container,
   Stack,
@@ -17,7 +17,7 @@ import { LocalShipping, Person, ShoppingBag } from '@mui/icons-material'
 import PersonalInfo from '../UserProfile/PersonalInfo'
 import ShippingAddress from '../UserProfile/ShippingAddress'
 import Orders from '../UserProfile/Orders'
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../hooks/reduxHooks'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useGetUserByIDQuery } from '../../redux/services/userAPI'
 import ServerError from './ServerError'
@@ -25,10 +25,10 @@ import Loading from '../Loading'
 import Cookies from 'js-cookie'
 
 const UserProfile = () => {
-  const [activeTab, setActiveTab] = useState(0)
-  const language = useSelector((state) => state.language.language)
+  const [activeTab, setActiveTab] = React.useState(0)
+  const language = useAppSelector((state) => state.language.language)
 
-  const params = useParams('userid')
+  const params = useParams()
   const navigate = useNavigate()
 
   const headers = {
@@ -59,25 +59,29 @@ const UserProfile = () => {
     },
   ]
 
-  const handleListItemClick = (event, index) => {
+  const handleListItemClick = (event: any, index: number) => {
     setActiveTab(index)
   }
 
   const displayActiveTab = () => {
     switch (activeTab) {
       case 0:
-        return <PersonalInfo userQueryData={userInfo} headers={headers} />
+        return (
+          <PersonalInfo userQueryData={userInfo?.result} headers={headers} />
+        )
       case 1:
-        return <ShippingAddress userQueryData={userInfo} headers={headers} />
+        return (
+          <ShippingAddress userQueryData={userInfo?.result} headers={headers} />
+        )
       case 2:
-        return <Orders userQueryData={userInfo} />
+        return <Orders userQueryData={userInfo?.result} />
       default:
         break
     }
   }
 
-  useEffect(() => {
-    if (error && error.data && error.data.message === 'No Tokens Provided') {
+  React.useEffect(() => {
+    if (error) {
       navigate('/login')
     }
   }, [error, navigate])
@@ -85,7 +89,7 @@ const UserProfile = () => {
   return (
     <>
       {isLoading ? (
-        <Loading open={isLoading} />
+        <Loading />
       ) : error ? (
         <ServerError buttonText={'Login'} buttonLink={'/login'} />
       ) : (

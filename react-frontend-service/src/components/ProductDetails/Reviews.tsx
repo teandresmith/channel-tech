@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Stack,
   Box,
@@ -14,18 +14,28 @@ import {
   Avatar,
 } from '@mui/material'
 import { FormProvider, useForm } from 'react-hook-form'
-import ReactHookFormTextField from '../CustomInputs/ReactHookFormTextField'
-import ReactHookFormRating from '../CustomInputs/ReactHookFormRating'
+import { MHFTextField, MHFRating } from 'mui-hook-form-mhf'
 import { useCreateReviewMutation } from '../../redux/services/productAPI'
+import { Product } from '../../redux/types/Types'
 
-const Reviews = ({ data }) => {
-  const methods = useForm()
+type ReviewsProp = {
+  data: Product
+}
 
-  const [openModal, setOpenModal] = useState(false)
+type FormData = {
+  name: string
+  rating: string
+  comment: string
+}
+
+const Reviews = ({ data }: ReviewsProp) => {
+  const methods = useForm<FormData>()
+
+  const [openModal, setOpenModal] = React.useState(false)
 
   const [createReview] = useCreateReviewMutation()
 
-  const onSubmit = (info) => {
+  const onSubmit = (info: FormData) => {
     const review = {
       name: info.name,
       rating: parseFloat(info.rating),
@@ -123,7 +133,7 @@ const Reviews = ({ data }) => {
                           us and other customers to understand the quality of
                           service and goods provided.
                         </DialogContentText>
-                        <ReactHookFormTextField
+                        <MHFTextField
                           defaultValue='Anon'
                           name='name'
                           control={methods.control}
@@ -137,8 +147,8 @@ const Reviews = ({ data }) => {
                           color='secondary'
                         />
 
-                        <ReactHookFormRating control={methods.control} />
-                        <ReactHookFormTextField
+                        <MHFRating name='rating' control={methods.control} />
+                        <MHFTextField
                           defaultValue=''
                           name='comment'
                           control={methods.control}

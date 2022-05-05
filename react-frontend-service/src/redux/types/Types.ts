@@ -49,6 +49,8 @@ export type User = {
     lastName?: string
     email?: string
     Password?: string
+    orders?: Array<Order>
+    defaultAddress?: Address
     userType?: string
     userId?: string
     token?: string
@@ -56,4 +58,26 @@ export type User = {
     createdAt?: string
     updatedAt?: string
   } | null
+}
+
+export type Order = {
+  _id: string
+  firstName: string
+  lastname: string
+  paymentMethod: string
+  shippingAddress: Address
+  orderItems: Array<{ quantity: number; product: Product }>
+  totalPrice: number
+  isPaid: string
+  orderId: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type Address = {
+  streetAddress: string
+  city: string
+  statePrefecture: string
+  country: string
+  postalCode: string
 }
