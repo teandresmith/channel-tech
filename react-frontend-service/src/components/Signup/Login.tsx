@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
   Box,
   Button,
@@ -11,31 +11,36 @@ import {
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTheme } from '@mui/system'
-import { useSelector, useDispatch } from 'react-redux'
-import ReactHookFormTextField from '../CustomInputs/ReactHookFormTextField'
+import { MHFTextField } from 'mui-hook-form-mhf'
 import { useLoginMutation } from '../../redux/services/loginAPI'
 import { setUser } from '../../redux/states/user'
 import Cookies from 'js-cookie'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
+
+type FormData = {
+  email: string
+  Password: string
+}
 
 const Login = () => {
-  const methods = useForm()
+  const methods = useForm<FormData>()
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.down('md'))
 
   const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const [login, { isLoading, data }] = useLoginMutation()
 
-  const language = useSelector((state) => state.language.language)
+  const language = useAppSelector((state) => state.language.language)
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormData) => {
     login(data)
     methods.setValue('email', '')
     methods.setValue('Password', '')
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (data && data.message === 'Login Successful') {
       navigate('/')
       dispatch(
@@ -87,7 +92,7 @@ const Login = () => {
                 onSubmit={methods.handleSubmit(onSubmit)}
               >
                 <Stack direction='column' spacing={2}>
-                  <ReactHookFormTextField
+                  <MHFTextField
                     defaultValue=''
                     name='email'
                     control={methods.control}
@@ -99,7 +104,7 @@ const Login = () => {
                     type='email'
                     required
                   />
-                  <ReactHookFormTextField
+                  <MHFTextField
                     defaultValue=''
                     name='Password'
                     control={methods.control}

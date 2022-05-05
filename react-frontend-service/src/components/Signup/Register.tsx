@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
   Button,
   Box,
@@ -11,24 +11,31 @@ import {
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTheme } from '@mui/system'
-import { useSelector, useDispatch } from 'react-redux'
-import ReactHookFormTextField from '../CustomInputs/ReactHookFormTextField'
+import { MHFTextField } from 'mui-hook-form-mhf'
 import { useRegisterMutation } from '../../redux/services/loginAPI'
 import { setUser } from '../../redux/states/user'
 import Cookies from 'js-cookie'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
+
+type FormData = {
+  firstName: string
+  lastName: string
+  email: string
+  Password: string
+}
 
 const Register = () => {
-  const methods = useForm()
+  const methods = useForm<FormData>()
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.down('md'))
 
   const [register, { isLoading, data }] = useRegisterMutation()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const language = useSelector((state) => state.language.language)
+  const language = useAppSelector((state) => state.language.language)
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormData) => {
     register(data)
     methods.setValue('firstName', '')
     methods.setValue('lastName', '')
@@ -36,7 +43,7 @@ const Register = () => {
     methods.setValue('Password', '')
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (data && data.message === 'Registration Successful') {
       navigate('/')
       dispatch(
@@ -87,7 +94,7 @@ const Register = () => {
                 onSubmit={methods.handleSubmit(onSubmit)}
               >
                 <Stack direction='column' spacing={2}>
-                  <ReactHookFormTextField
+                  <MHFTextField
                     defaultValue=''
                     name='firstName'
                     control={methods.control}
@@ -99,7 +106,7 @@ const Register = () => {
                     color='secondary'
                     required
                   />
-                  <ReactHookFormTextField
+                  <MHFTextField
                     defaultValue=''
                     name='lastName'
                     control={methods.control}
@@ -110,7 +117,7 @@ const Register = () => {
                     color='secondary'
                     required
                   />
-                  <ReactHookFormTextField
+                  <MHFTextField
                     defaultValue=''
                     name='email'
                     control={methods.control}
@@ -122,7 +129,7 @@ const Register = () => {
                     type='email'
                     required
                   />
-                  <ReactHookFormTextField
+                  <MHFTextField
                     defaultValue=''
                     name='Password'
                     control={methods.control}
