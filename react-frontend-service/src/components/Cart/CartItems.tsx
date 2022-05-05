@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import React from 'react'
+
 import {
   Stack,
   Box,
@@ -11,12 +11,14 @@ import {
   InputLabel,
 } from '@mui/material'
 import { Delete } from '@mui/icons-material'
-import { useDispatch } from 'react-redux'
+
 import { addToCart, deleteFromCart } from '../../redux/states/cart'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
+import { Cart } from '../../redux/types/Types'
 
 const CartItems = () => {
-  const cart = useSelector((state) => state.cart.value)
-  const language = useSelector((state) => state.language.language)
+  const cart = useAppSelector((state) => state.cart.value)
+  const language = useAppSelector((state) => state.language.language)
 
   const loadQuantities = () => {
     let data = {}
@@ -26,12 +28,16 @@ const CartItems = () => {
     return data
   }
 
-  const [quantities, setQuantities] = useState(loadQuantities())
+  const [quantities, setQuantities] = React.useState<any>(loadQuantities())
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
-  const handleQuantityChange = (index, quantity, item) => {
-    setQuantities((prevState) => ({ ...prevState, [index]: quantity }))
+  const handleQuantityChange = (
+    index: number,
+    quantity: number,
+    item: Cart
+  ) => {
+    setQuantities((prevState: any) => ({ ...prevState, [index]: quantity }))
     dispatch(
       addToCart({
         info: {
@@ -43,7 +49,7 @@ const CartItems = () => {
     )
   }
 
-  const handleDelete = (item) => {
+  const handleDelete = (item: Cart) => {
     dispatch(
       deleteFromCart({
         info: {
@@ -56,7 +62,7 @@ const CartItems = () => {
 
   return (
     <>
-      {cart.map((item, index) => (
+      {cart.map((item: Cart, index: any) => (
         <Stack
           key={item.product.productId}
           direction={'column'}

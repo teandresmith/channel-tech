@@ -1,12 +1,12 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { Container, Stack, Box, Typography } from '@mui/material'
 import CartItems from '../Cart/CartItems'
 import CartInfo from '../Cart/CartInfo'
+import { useAppSelector } from '../../hooks/reduxHooks'
 
 const Cart = () => {
-  const cart = useSelector((state) => state.cart.value)
-  const language = useSelector((state) => state.language.language)
+  const cart = useAppSelector((state) => state.cart.value)
+  const language = useAppSelector((state) => state.language.language)
 
   return (
     <>

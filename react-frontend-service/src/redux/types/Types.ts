@@ -23,3 +23,8 @@ export type Product = {
   updatedAt: string
   _id: string
 }
+
+export interface Cart {
+  product: Product
+  quantity: number
+}

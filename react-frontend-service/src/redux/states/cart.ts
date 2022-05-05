@@ -1,10 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { Product, Cart } from '../types/Types'
 
-const initialState = {
-  value:
-    localStorage.getItem('cart') === null
-      ? []
-      : JSON.parse(localStorage.getItem('cart')),
+interface InitialState {
+  value: Array<Cart>
+}
+
+const value = JSON.parse(localStorage.getItem('cart') as string)
+
+const initialState: InitialState = {
+  value: value !== null ? value : [],
 }
 
 export const cartSlice = createSlice({
@@ -15,11 +19,11 @@ export const cartSlice = createSlice({
       const addItem = action.payload.info
       const cart = action.payload.cart
       const itemExists = cart.find(
-        (item) => item.product.name === addItem.product.name
+        (item: Cart) => item.product.name === addItem.product.name
       )
 
       if (itemExists) {
-        state.value = cart.map((item) =>
+        state.value = cart.map((item: Cart) =>
           item.product.name === addItem.product.name ? addItem : item
         )
       } else {
@@ -32,7 +36,7 @@ export const cartSlice = createSlice({
       const deleteItem = action.payload.info
       const cart = action.payload.cart
       state.value = cart.filter(
-        (item) => item.product.name !== deleteItem.product.name
+        (item: Cart) => item.product.name !== deleteItem.product.name
       )
       localStorage.setItem('cart', JSON.stringify(state.value))
     },

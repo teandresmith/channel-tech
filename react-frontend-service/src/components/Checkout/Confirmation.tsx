@@ -1,10 +1,10 @@
 import React from 'react'
 import { Box, Typography, Button } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../hooks/reduxHooks'
 
 const Confirmation = () => {
-  const paymentInfo = useSelector((state) => state.checkout.paymentInfo)
+  const paymentInfo = useAppSelector((state) => state.checkout.paymentInfo)
 
   return (
     <>
@@ -15,7 +15,7 @@ const Confirmation = () => {
           contact us!
         </Typography>
         <Typography variant='body1' sx={{ pb: 5 }}>
-          Your order confirmation id is: #{paymentInfo.orderId}
+          Your order confirmation id is: #{paymentInfo?.orderId}
         </Typography>
         <Box
           component='div'

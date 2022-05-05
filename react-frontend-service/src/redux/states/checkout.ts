@@ -1,8 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = {
-  shippingInfo: {},
-  paymentInfo: {},
+interface ShippingInfo {
+  firstName: string
+  lastName: string
+  email: string
+  street: string
+  city: string
+  postalCode: string
+  state: string
+  country: string
+}
+
+interface InitialState {
+  shippingInfo: ShippingInfo | null
+  paymentInfo: { paymentId: string; orderId: string } | null
+}
+
+const initialState: InitialState = {
+  shippingInfo: null,
+  paymentInfo: null,
 }
 
 export const checkoutSlice = createSlice({

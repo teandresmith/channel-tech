@@ -1,30 +1,67 @@
 import React from 'react'
 import { Grid, Stack, Button, Box } from '@mui/material'
 import { useForm, FormProvider } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux'
-import ReactHookFormTextField from '../CustomInputs/ReactHookFormTextField'
-import ReactHookFormSelect from '../CustomInputs/ReactHookFormSelect'
+
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
+import { MHFTextField, MHFSelect } from 'mui-hook-form-mhf'
+
 import { prefectureList, stateList } from '../../assets/data/data'
-import { useEffect } from 'react'
 import { setShippingInfo } from '../../redux/states/checkout'
 
-const ShippingInfo = ({ incrementActiveStep, userQueryData }) => {
-  const methods = useForm()
+type FormData = {
+  firstName: string
+  lastName: string
+  email: string
+  street: string
+  city: string
+  state: string
+  country: string
+  postalCode: string
+}
+
+type ShippingInfoProps = {
+  incrementActiveStep: () => void
+  userQueryData: {
+    _id: string
+    firstName: string
+    lastName: string
+    email: string
+    Password: string
+    orders: Array<any>
+    defaultAddress: {
+      streetAddress: string
+      city: string
+      statePrefecture: string
+      country: string
+      postalCode: string
+    }
+    userType: string
+    userId: string
+    token: string
+    refreshToken: string
+    createdAt: string
+    updatedAt: string
+  }
+}
+
+const ShippingInfo = ({
+  incrementActiveStep,
+  userQueryData,
+}: ShippingInfoProps) => {
+  const methods = useForm<FormData>()
   const countries = ['USA', 'Japan']
 
-  const dispatch = useDispatch()
-  const shippingInfo = useSelector((state) => state.checkout.shippingInfo)
+  const dispatch = useAppDispatch()
+  const shippingInfo = useAppSelector((state) => state.checkout.shippingInfo)
 
   let country = methods.watch(
     'country',
     Object.keys(userQueryData).length === 0
       ? 'USA'
-      : userQueryData.result &&
-          userQueryData.defaultAddress &&
-          userQueryData.result.defaultAddress.country
+      : userQueryData?.defaultAddress?.country
   )
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormData) => {
     dispatch(
       setShippingInfo({
         shippingInfo: data,
@@ -34,37 +71,28 @@ const ShippingInfo = ({ incrementActiveStep, userQueryData }) => {
   }
 
   const setUserInfo = () => {
-    methods.setValue('firstName', userQueryData.result.firstName)
-    methods.setValue('lastName', userQueryData.result.lastName)
-    methods.setValue('email', userQueryData.result.email)
-    if (userQueryData.result.defaultAddress) {
-      methods.setValue(
-        'street',
-        userQueryData.result.defaultAddress.streetAddress
-      )
-      methods.setValue('city', userQueryData.result.defaultAddress.city)
-      methods.setValue(
-        'postalCode',
-        userQueryData.result.defaultAddress.postalCode
-      )
-      methods.setValue(
-        'state',
-        userQueryData.result.defaultAddress.statePrefecture
-      )
-      methods.setValue('country', userQueryData.result.defaultAddress.country)
+    methods.setValue('firstName', userQueryData?.firstName)
+    methods.setValue('lastName', userQueryData?.lastName)
+    methods.setValue('email', userQueryData?.email)
+    if (userQueryData?.defaultAddress) {
+      methods.setValue('street', userQueryData?.defaultAddress?.streetAddress)
+      methods.setValue('city', userQueryData?.defaultAddress?.city)
+      methods.setValue('postalCode', userQueryData?.defaultAddress?.postalCode)
+      methods.setValue('state', userQueryData?.defaultAddress?.statePrefecture)
+      methods.setValue('country', userQueryData?.defaultAddress?.country)
     }
   }
 
-  useEffect(() => {
-    if (shippingInfo && shippingInfo.firstName) {
-      methods.setValue('firstName', shippingInfo.firstName)
-      methods.setValue('lastName', shippingInfo.lastName)
-      methods.setValue('email', shippingInfo.email)
-      methods.setValue('street', shippingInfo.street)
-      methods.setValue('city', shippingInfo.city)
-      methods.setValue('postalCode', shippingInfo.postalCode)
-      methods.setValue('state', shippingInfo.state)
-      methods.setValue('country', shippingInfo.country)
+  React.useEffect(() => {
+    if (shippingInfo && shippingInfo?.firstName) {
+      methods.setValue('firstName', shippingInfo?.firstName)
+      methods.setValue('lastName', shippingInfo?.lastName)
+      methods.setValue('email', shippingInfo?.email)
+      methods.setValue('street', shippingInfo?.street)
+      methods.setValue('city', shippingInfo?.city)
+      methods.setValue('postalCode', shippingInfo?.postalCode)
+      methods.setValue('state', shippingInfo?.state)
+      methods.setValue('country', shippingInfo?.country)
     }
   }, [])
 
@@ -72,8 +100,8 @@ const ShippingInfo = ({ incrementActiveStep, userQueryData }) => {
     <>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <FormProvider {...methods}>
-          <Box componet='div'>
-            {userQueryData && userQueryData.result && (
+          <Box component='div'>
+            {userQueryData && (
               <Button color='secondary' onClick={() => setUserInfo()}>
                 Use Default Shipping Address
               </Button>
@@ -81,7 +109,7 @@ const ShippingInfo = ({ incrementActiveStep, userQueryData }) => {
           </Box>
           <Grid container columnSpacing={2} rowSpacing={2}>
             <Grid item xs={12} sm={4}>
-              <ReactHookFormTextField
+              <MHFTextField
                 defaultValue=''
                 name='firstName'
                 control={methods.control}
@@ -96,7 +124,7 @@ const ShippingInfo = ({ incrementActiveStep, userQueryData }) => {
               />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <ReactHookFormTextField
+              <MHFTextField
                 defaultValue=''
                 name='lastName'
                 control={methods.control}
@@ -110,7 +138,7 @@ const ShippingInfo = ({ incrementActiveStep, userQueryData }) => {
               />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <ReactHookFormTextField
+              <MHFTextField
                 defaultValue=''
                 name='email'
                 control={methods.control}
@@ -124,7 +152,7 @@ const ShippingInfo = ({ incrementActiveStep, userQueryData }) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <ReactHookFormTextField
+              <MHFTextField
                 defaultValue=''
                 name={'street'}
                 control={methods.control}
@@ -141,7 +169,7 @@ const ShippingInfo = ({ incrementActiveStep, userQueryData }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <ReactHookFormTextField
+              <MHFTextField
                 defaultValue=''
                 name='city'
                 control={methods.control}
@@ -156,7 +184,7 @@ const ShippingInfo = ({ incrementActiveStep, userQueryData }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <ReactHookFormTextField
+              <MHFTextField
                 defaultValue=''
                 name='postalCode'
                 control={methods.control}
@@ -170,7 +198,7 @@ const ShippingInfo = ({ incrementActiveStep, userQueryData }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <ReactHookFormSelect
+              <MHFSelect
                 defaultValue={''}
                 name='state'
                 control={methods.control}
@@ -178,21 +206,19 @@ const ShippingInfo = ({ incrementActiveStep, userQueryData }) => {
                 required
                 label={country === 'USA' ? 'State' : 'Prefecture'}
                 labelId='state-selector'
-                selectId={'state'}
-                selectData={country === 'USA' ? stateList : prefectureList}
+                selectItemList={country === 'USA' ? stateList : prefectureList}
                 color='secondary'
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <ReactHookFormSelect
+              <MHFSelect
                 defaultValue={countries[0]}
                 name='country'
                 control={methods.control}
                 fullWidth
                 label={'Country'}
                 labelId='country-selector'
-                selectId={'country'}
-                selectData={countries}
+                selectItemList={countries}
                 color='secondary'
               />
             </Grid>

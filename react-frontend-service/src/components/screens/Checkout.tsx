@@ -5,8 +5,8 @@ import PaymentInfo from '../Checkout/PaymentInfo'
 import Confirmation from '../Checkout/Confirmation'
 import Loading from '../Loading'
 
-import { useSelector } from 'react-redux'
 import { useGetUserByIDQuery } from '../../redux/services/userAPI'
+import { useAppSelector } from '../../hooks/reduxHooks'
 import Cookies from 'js-cookie'
 
 const Checkout = () => {
@@ -21,7 +21,7 @@ const Checkout = () => {
     setActiveStep((prevValue) => prevValue - 1)
   }
 
-  const user = useSelector((state) => state.user.user)
+  const user = useAppSelector((state) => state.user.user)
 
   const headers = {
     token: Cookies.get('Token'),
@@ -39,7 +39,7 @@ const Checkout = () => {
         return (
           <ShippingInfo
             incrementActiveStep={incrementActiveStep}
-            userQueryData={error ? {} : data}
+            userQueryData={error ? {} : data.result}
           />
         )
       case 1:
@@ -60,7 +60,7 @@ const Checkout = () => {
   return (
     <>
       {isLoading ? (
-        <Loading open={isLoading} />
+        <Loading />
       ) : (
         <Container maxWidth='md'>
           <Alert severity={'warning'} sx={{ mb: 2 }}>
