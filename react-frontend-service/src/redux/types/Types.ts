@@ -1,3 +1,5 @@
+import { StaticData } from '../../assets/data/data'
+
 export type Product = {
   brand: string
   category: string
@@ -24,7 +26,34 @@ export type Product = {
   _id: string
 }
 
-export interface Cart {
+export type Cart = {
   product: Product
   quantity: number
+}
+
+export type Language = {
+  language: string | null
+  languageData: StaticData
+}
+
+export type URLFilters = {
+  filters: Array<any>
+  subFilters: Array<any>
+  pagination: { page: number; dataskip: number; productsPerPage: number }
+}
+
+export type User = {
+  user: {
+    _id?: string
+    firstName?: string
+    lastName?: string
+    email?: string
+    Password?: string
+    userType?: string
+    userId?: string
+    token?: string
+    refreshToken?: string
+    createdAt?: string
+    updatedAt?: string
+  } | null
 }

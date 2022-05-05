@@ -1,10 +1,10 @@
 import React from 'react'
 import { Breadcrumbs, Typography } from '@mui/material'
 import { Link, useSearchParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../hooks/reduxHooks'
 
 const BreadCrumbs = () => {
-  const language = useSelector((state) => state.language.language)
+  const language = useAppSelector((state) => state.language.language)
 
   let [searchParams] = useSearchParams()
   let category = searchParams.get('category')

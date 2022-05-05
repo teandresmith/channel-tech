@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { englishLinks, japaneseLinks } from '../../assets/data/data'
+import { Language } from '../types/Types'
 
 const language =
   localStorage.getItem('lang') !== null ? localStorage.getItem('lang') : 'en'
 
-const initialState = {
+const initialState: Language = {
   language: language,
   languageData: language === 'en' ? englishLinks : japaneseLinks,
 }

@@ -29,7 +29,7 @@ const Checkout = () => {
   }
 
   const { data, isLoading, error } = useGetUserByIDQuery({
-    userID: user.userId,
+    userID: user?.userId,
     headers: headers,
   })
 

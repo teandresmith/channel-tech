@@ -1,32 +1,30 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   ListItem,
   ListItemText,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Typography,
-  MenuItem,
   Menu,
+  MenuItem,
   Button,
-  useMediaQuery,
   useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import { ExpandMore } from '@mui/icons-material'
-
 import { Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { setPagination, setSubFilters } from '../../../redux/states/urlFilters'
+import { setSubFilters, setPagination } from '../../../redux/states/urlFilters'
+import { useAppSelector, useAppDispatch } from '../../../hooks/reduxHooks'
 
-const Categories = ({ category, setSortBy }) => {
-  const [categories, setCategories] = useState([])
-
+const NoFilterCategories = () => {
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.down('md'))
 
-  const languageData = useSelector((state) => state.language.languageData)
-  const language = useSelector((state) => state.language.language)
-  const dispatch = useDispatch()
+  const languageData = useAppSelector((state) => state.language.languageData)
+  const language = useAppSelector((state) => state.language.language)
+
+  const dispatch = useAppDispatch()
 
   const handleCategoryChange = () => {
     dispatch(
@@ -40,11 +38,10 @@ const Categories = ({ category, setSortBy }) => {
         dataskip: 0,
       })
     )
-    setSortBy('none')
   }
 
-  const checkCategoryIteration = (category) => {
-    var categoryItems = []
+  const checkCategoryIteration = (category: string) => {
+    var categoryItems: Array<string> = []
     switch (category) {
       case 'Computers':
       case 'パソコン':
@@ -75,8 +72,8 @@ const Categories = ({ category, setSortBy }) => {
           <ListItem
             component={Link}
             to={`/shop?category=${category}&subcategory=${value}&lang=${language}`}
-            onClick={() => handleCategoryChange()}
             key={index}
+            onClick={() => handleCategoryChange()}
             sx={{ textDecoration: 'none', color: '#000000DE' }}
           >
             <ListItemText primary={value} />
@@ -86,18 +83,12 @@ const Categories = ({ category, setSortBy }) => {
     )
   }
 
-  useEffect(() => {
-    if (category) {
-      setCategories([category])
-    }
-  }, [category])
-
   return (
     <>
       {matches ? (
-        <MobileCategories category={category} setSortBy={setSortBy} />
+        <MobileNoFilterCategories />
       ) : (
-        categories.map((category) => (
+        languageData.Shop.AllProductCategories.map((category) => (
           <Accordion
             key={category}
             sx={{ backgroundColor: 'white', boxShadow: 'none' }}
@@ -115,22 +106,39 @@ const Categories = ({ category, setSortBy }) => {
   )
 }
 
-export default Categories
+export default NoFilterCategories
 
-const MobileCategories = ({ category, setSortBy }) => {
-  const [categoryAnchorEl, setCategoryAnchorEl] = useState(null)
-  const categoryOpen = Boolean(categoryAnchorEl)
+const MobileNoFilterCategories = () => {
+  const [computerAnchorEl, setComputerAnchorEl] = React.useState(null)
+  const computerOpen = Boolean(computerAnchorEl)
 
-  const languageData = useSelector((state) => state.language.languageData)
-  const language = useSelector((state) => state.language.language)
-  const dispatch = useDispatch()
+  const [phoneAnchorEl, setPhoneAnchorEl] = React.useState(null)
+  const phoneOpen = Boolean(phoneAnchorEl)
 
-  const handleCategoryAnchor = (event) => {
-    setCategoryAnchorEl(event.currentTarget)
+  const [entertainmentAnchorEl, setEntertainmentAnchorEl] = React.useState(null)
+  const entertainmentOpen = Boolean(entertainmentAnchorEl)
+
+  const languageData = useAppSelector((state) => state.language.languageData)
+  const language = useAppSelector((state) => state.language.language)
+
+  const dispatch = useAppDispatch()
+
+  const handleComputerAnchor = (event: any) => {
+    setComputerAnchorEl(event.currentTarget)
+  }
+
+  const handlePhoneAnchor = (event: any) => {
+    setPhoneAnchorEl(event.currentTarget)
+  }
+
+  const handleEntertainmentAnchor = (event: any) => {
+    setEntertainmentAnchorEl(event.currentTarget)
   }
 
   const handleClose = () => {
-    setCategoryAnchorEl(null)
+    setComputerAnchorEl(null)
+    setPhoneAnchorEl(null)
+    setEntertainmentAnchorEl(null)
     dispatch(
       setSubFilters({
         subFilters: [],
@@ -143,11 +151,10 @@ const MobileCategories = ({ category, setSortBy }) => {
         dataskip: 0,
       })
     )
-    setSortBy('none')
   }
 
-  const checkCategoryIteration = (category) => {
-    var categoryItems = []
+  const checkCategoryIteration = (category: string) => {
+    var categoryItems: Array<string> = []
     switch (category) {
       case 'Computers':
       case 'パソコン':
@@ -186,19 +193,40 @@ const MobileCategories = ({ category, setSortBy }) => {
 
   return (
     <>
-      <Button onClick={(e) => handleCategoryAnchor(e)} color='inherit'>
-        {category}
+      <Button onClick={(e) => handleComputerAnchor(e)} color='inherit'>
+        {language === 'en' ? 'Computers' : 'パソコン'}
       </Button>
       <Menu
-        id={`${category}-menu`}
-        anchorEl={categoryAnchorEl}
-        open={categoryOpen}
+        id='Computer-menu'
+        anchorEl={computerAnchorEl}
+        open={computerOpen}
         onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'menu-button',
-        }}
       >
-        {checkCategoryIteration(category)}
+        {checkCategoryIteration(language === 'en' ? 'Computers' : 'パソコン')}
+      </Menu>
+      <Button onClick={(e) => handlePhoneAnchor(e)} color='inherit'>
+        {language === 'en' ? 'Phones' : '電話'}
+      </Button>
+      <Menu
+        id='Phones-menu'
+        anchorEl={phoneAnchorEl}
+        open={phoneOpen}
+        onClose={handleClose}
+      >
+        {checkCategoryIteration(language === 'en' ? 'Phones' : '電話')}
+      </Menu>
+      <Button onClick={(e) => handleEntertainmentAnchor(e)} color='inherit'>
+        {language === 'en' ? 'Entertainment' : '電気機器'}
+      </Button>
+      <Menu
+        id='Entertainment-menu'
+        anchorEl={entertainmentAnchorEl}
+        open={entertainmentOpen}
+        onClose={handleClose}
+      >
+        {checkCategoryIteration(
+          language === 'en' ? 'Entertainment' : '電気機器'
+        )}
       </Menu>
     </>
   )

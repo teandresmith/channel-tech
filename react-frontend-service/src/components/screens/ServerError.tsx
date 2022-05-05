@@ -2,7 +2,13 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Container, Typography } from '@mui/material'
 
-const ServerError = ({ text, buttonText, buttonLink }) => {
+type ServerErrorProps = {
+  text?: string
+  buttonText?: string
+  buttonLink?: string
+}
+
+const ServerError = ({ text, buttonText, buttonLink }: ServerErrorProps) => {
   return (
     <>
       <Container maxWidth='lg'>

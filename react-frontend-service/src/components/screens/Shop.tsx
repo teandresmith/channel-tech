@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Container } from '@mui/material'
 
 import { useSearchParams } from 'react-router-dom'
 import Filtered from '../Shop/Filtered'
 import NoFilter from '../Shop/NoFilter'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import {
   filterProductByTagAndSubfilters,
   filterProductsByCategory,
@@ -13,17 +13,21 @@ import {
   filterProductsByTag,
 } from '../../redux/states/productState'
 import BreadCrumbs from '../Shop/BreadCrumbs'
+import { Product } from '../../redux/types/Types'
 
-const Shop = ({ data }) => {
-  const languageData = useSelector((state) => state.language.languageData)
+type ShopProps = {
+  data: Array<Product>
+}
+
+const Shop = ({ data }: ShopProps) => {
+  const languageData = useAppSelector((state) => state.language.languageData)
 
   let [searchParams] = useSearchParams()
-  let shopFilter = searchParams.get('filter')
   let category = searchParams.get('category')
   let subCategory = searchParams.get('subcategory')
   let subFilters = searchParams.get('subfilters')
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const checkShopParams = () => {
     let payload = {}
@@ -72,7 +76,7 @@ const Shop = ({ data }) => {
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (category) {
       checkShopParams()
     }
@@ -81,7 +85,7 @@ const Shop = ({ data }) => {
   return (
     <>
       <Container maxWidth='xl' sx={{ height: '100%' }}>
-        <BreadCrumbs shopFilter={shopFilter} />
+        <BreadCrumbs />
         {category ? <Filtered /> : <NoFilter data={data} />}
       </Container>
     </>

@@ -1,16 +1,27 @@
 import React from 'react'
 import { Grid, Stack, Box, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../../hooks/reduxHooks'
+import { Product } from '../../../redux/types/Types'
 
-const ProductList = () => {
-  const products = useSelector((state) => state.product.value)
-  const pagination = useSelector((state) => state.urlFilters.pagination)
-  const language = useSelector((state) => state.language.language)
-  let pageProducts = [...products].slice(
-    pagination.dataskip,
-    pagination.productsPerPage + pagination.dataskip
-  )
+type UnFilteredProductListProps = {
+  data: Array<Product>
+}
+
+const UnFilteredProductList = ({ data }: UnFilteredProductListProps) => {
+  const language = useAppSelector((state) => state.language.language)
+  const products = useAppSelector((state) => state.product.value)
+  const pagination = useAppSelector((state) => state.urlFilters.pagination)
+  let pageProducts =
+    products.length !== 0
+      ? [...products].slice(
+          pagination.dataskip,
+          pagination.productsPerPage + pagination.dataskip
+        )
+      : [...data].slice(
+          pagination.dataskip,
+          pagination.productsPerPage + pagination.dataskip
+        )
 
   return (
     <>
@@ -24,8 +35,9 @@ const ProductList = () => {
             </Grid>
           </>
         )}
+
         {pageProducts.map((item) => (
-          <Grid item xs={6} sm={4} md={3} key={item.productId}>
+          <Grid item xs={6} sm={4} md={3} key={`${item.name}+${item.price}`}>
             <Stack
               component={Link}
               to={`/products/${item.name}`}
@@ -73,4 +85,4 @@ const ProductList = () => {
   )
 }
 
-export default ProductList
+export default UnFilteredProductList

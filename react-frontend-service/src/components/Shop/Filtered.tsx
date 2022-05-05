@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-
+import React from 'react'
 import {
   Typography,
   Stack,
@@ -9,7 +8,7 @@ import {
   Box,
   Pagination,
 } from '@mui/material'
-import { useSelector, useDispatch } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { useSearchParams } from 'react-router-dom'
 import { sortProducts } from '../../redux/states/productState'
 import ProductList from './Filtered/ProductList'
@@ -18,7 +17,7 @@ import SubFilters from './Filtered/SubFilters'
 import { setPagination, setSubFilters } from '../../redux/states/urlFilters'
 
 const Filtered = () => {
-  const [sortBy, setSortBy] = useState('none')
+  const [sortBy, setSortBy] = React.useState('none')
   const sortingMethods = ['A-Z', 'Z-A', 'Price (low)', 'Price (high)']
 
   let [searchParams] = useSearchParams()
@@ -26,14 +25,14 @@ const Filtered = () => {
   let subCategory = searchParams.get('subcategory')
   let subFilters = searchParams.get('subfilters')
 
-  const dispatch = useDispatch()
-  const products = useSelector((state) => state.product.value)
-  const pagination = useSelector((state) => state.urlFilters.pagination)
+  const dispatch = useAppDispatch()
+  const products = useAppSelector((state) => state.product.value)
+  const pagination = useAppSelector((state) => state.urlFilters.pagination)
 
   // Sort By MUI Menu Component Handlers/Functions
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
-  const handlePositionClick = (event) => {
+  const handlePositionClick = (event: any) => {
     setAnchorEl(event.currentTarget)
   }
   const handleMenuClose = () => {
@@ -41,7 +40,7 @@ const Filtered = () => {
   }
 
   // Handles the Sorting of the Product State
-  const handleSortBySelection = (selection) => {
+  const handleSortBySelection = (selection: string) => {
     setSortBy(selection)
     dispatch(
       sortProducts({
@@ -78,7 +77,7 @@ const Filtered = () => {
   }
 
   // Handles all data being handled by Pagination.
-  const handlePagination = (event, value) => {
+  const handlePagination = (event: any, value: number) => {
     dispatch(
       setPagination({
         page: value,
@@ -90,7 +89,7 @@ const Filtered = () => {
     })
   }
 
-  const calculateSkip = (value) => {
+  const calculateSkip = (value: number) => {
     let skip = (value - 1) * pagination.productsPerPage
     if (value === 1) {
       skip = 0
@@ -98,7 +97,7 @@ const Filtered = () => {
     return skip
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     dispatch(
       setSubFilters({
         subFilters: subFilters ? subFilters.split(',') : [],
@@ -198,8 +197,8 @@ const Filtered = () => {
           >
             <Categories category={category} setSortBy={setSortBy} />
             <SubFilters
-              category={category}
-              subCategory={subCategory}
+              category={category as string}
+              subCategory={subCategory as string}
               setSortBy={setSortBy}
             />
           </Box>

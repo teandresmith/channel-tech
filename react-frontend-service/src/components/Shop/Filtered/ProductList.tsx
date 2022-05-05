@@ -1,22 +1,16 @@
 import React from 'react'
 import { Grid, Stack, Box, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../../hooks/reduxHooks'
 
-const UnFilteredProductList = ({ data }) => {
-  const language = useSelector((state) => state.language.language)
-  const products = useSelector((state) => state.product.value)
-  const pagination = useSelector((state) => state.urlFilters.pagination)
-  let pageProducts =
-    products.length !== 0
-      ? [...products].slice(
-          pagination.dataskip,
-          pagination.productsPerPage + pagination.dataskip
-        )
-      : [...data].slice(
-          pagination.dataskip,
-          pagination.productsPerPage + pagination.dataskip
-        )
+const ProductList = () => {
+  const products = useAppSelector((state) => state.product.value)
+  const pagination = useAppSelector((state) => state.urlFilters.pagination)
+  const language = useAppSelector((state) => state.language.language)
+  let pageProducts = [...products].slice(
+    pagination.dataskip,
+    pagination.productsPerPage + pagination.dataskip
+  )
 
   return (
     <>
@@ -30,12 +24,11 @@ const UnFilteredProductList = ({ data }) => {
             </Grid>
           </>
         )}
-
         {pageProducts.map((item) => (
-          <Grid item xs={6} sm={4} md={3} key={`${item.name}+${item.price}`}>
+          <Grid item xs={6} sm={4} md={3} key={item?.productId}>
             <Stack
               component={Link}
-              to={`/products/${item.name}`}
+              to={`/products/${item?.name}`}
               direction='column'
               sx={{
                 textDecoration: 'none',
@@ -47,7 +40,7 @@ const UnFilteredProductList = ({ data }) => {
             >
               <Box
                 component='img'
-                src={item.image}
+                src={item?.image}
                 sx={{
                   height: { xs: 120, sm: 225 },
                   objectFit: 'contain',
@@ -57,20 +50,20 @@ const UnFilteredProductList = ({ data }) => {
                 variant='body1'
                 sx={{ fontSize: { xs: 12, sm: 14, md: 16 } }}
               >
-                {item.name}
+                {item?.name}
               </Typography>
               <Typography
                 variant='body2'
                 sx={{ fontSize: { xs: 10, sm: 12, md: 14 } }}
               >
-                {item.subcategory}
+                {item?.subcategory}
               </Typography>
               <Typography
                 variant='body2'
                 sx={{ fontSize: { xs: 10, sm: 12, md: 14 } }}
               >
                 {language === 'en' ? '$' : '¥'}
-                {item.price.toFixed(2)}
+                {item?.price.toFixed(2)}
               </Typography>
             </Stack>
           </Grid>
@@ -80,4 +73,4 @@ const UnFilteredProductList = ({ data }) => {
   )
 }
 
-export default UnFilteredProductList
+export default ProductList

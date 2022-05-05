@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import {
   Stack,
   Typography,
@@ -8,32 +8,37 @@ import {
   MenuItem,
   Pagination,
 } from '@mui/material'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { clearProducts, sortProducts } from '../../redux/states/productState'
 import UnFilteredProductList from './NoFilter/UnFilteredProductList'
 import NoFilterCategories from './NoFilter/NoFilterCategories'
 import { setPagination } from '../../redux/states/urlFilters'
+import { Product } from '../../redux/types/Types'
 
-const NoFilter = ({ data }) => {
-  const [sortBy, setSortBy] = useState('none')
+type NoFilterProps = {
+  data: Array<Product>
+}
+
+const NoFilter = ({ data }: NoFilterProps) => {
+  const [sortBy, setSortBy] = React.useState('none')
   const sortingMethods = ['A-Z', 'Z-A', 'Price (low)', 'Price (high)']
 
-  const pagination = useSelector((state) => state.urlFilters.pagination)
+  const pagination = useAppSelector((state) => state.urlFilters.pagination)
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   // Anchors used for the SortBy MUI Menu Component
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
-  const handlePositionClick = (event) => {
+  const handlePositionClick = (event: any) => {
     setAnchorEl(event.currentTarget)
   }
-  const handleMenuClose = () => {
+  const handleMenuClose = (event: any) => {
     setAnchorEl(null)
   }
 
   // Pagination Handlers / Functions
-  const handlePagination = (event, value) => {
+  const handlePagination = (event: any, value: number) => {
     dispatch(
       setPagination({
         page: value,
@@ -45,7 +50,7 @@ const NoFilter = ({ data }) => {
     })
   }
 
-  const calculateSkip = (value) => {
+  const calculateSkip = (value: number) => {
     let skip = (value - 1) * pagination.productsPerPage
     if (value === 1) {
       skip = 0
@@ -53,7 +58,7 @@ const NoFilter = ({ data }) => {
     return skip
   }
 
-  const handleSortBySelection = (selection) => {
+  const handleSortBySelection = (selection: string) => {
     setSortBy(selection)
     dispatch(
       sortProducts({
@@ -73,7 +78,7 @@ const NoFilter = ({ data }) => {
 
   const handleClearSortSelection = () => {
     setSortBy('none')
-    dispatch(clearProducts())
+    dispatch(clearProducts(''))
     dispatch(
       setPagination({
         page: 1,
@@ -82,8 +87,8 @@ const NoFilter = ({ data }) => {
     )
   }
 
-  useEffect(() => {
-    dispatch(clearProducts())
+  React.useEffect(() => {
+    dispatch(clearProducts(''))
   }, [])
 
   return (

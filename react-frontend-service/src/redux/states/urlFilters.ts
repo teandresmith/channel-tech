@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { URLFilters } from '../types/Types'
 
-const initialState = {
+const initialState: URLFilters = {
   filters: [],
   subFilters: [],
   pagination: {

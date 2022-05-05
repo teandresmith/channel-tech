@@ -1,9 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { User } from '../types/Types'
 
-const initialState = {
-  user: localStorage.getItem('user')
-    ? JSON.parse(localStorage.getItem('user'))
-    : {},
+const user =
+  localStorage.getItem('user') !== null
+    ? JSON.parse(localStorage.getItem('user') as string)
+    : {}
+
+const initialState: User = {
+  user: user,
 }
 
 export const userSlice = createSlice({

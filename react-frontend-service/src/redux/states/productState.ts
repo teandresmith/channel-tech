@@ -1,11 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { Product } from '../types/Types'
 
-const initialState = {
+interface ProductInitialState {
+  value: Array<Product>
+}
+
+const initialState: ProductInitialState = {
   value: [],
 }
 
-const filterHelper = (category, subCategory, products, subFilter) => {
-  const categoryItems = products.filter(
+const filterHelper = (
+  category?: string,
+  subCategory?: string,
+  products?: Array<Product>,
+  subFilter?: string
+) => {
+  const categoryItems = products?.filter(
     (product) => product.category === category
   )
 
@@ -20,7 +30,7 @@ const filterHelper = (category, subCategory, products, subFilter) => {
     return value
   }
 
-  const filteredItems = categoryItems.filter(
+  const filteredItems = categoryItems?.filter(
     (product) => product.subcategory === subCategory
   )
 
@@ -31,9 +41,9 @@ const filterHelper = (category, subCategory, products, subFilter) => {
   return checkMultipleParamsHelper(filteredItems, subFilter)
 }
 
-const checkMultipleParamsHelper = (array, subFilter) => {
+const checkMultipleParamsHelper = (array: any, subFilter: any) => {
   if (subFilter.length !== 1) {
-    subFilter = subFilter.map((items) =>
+    subFilter = subFilter.map((items: any) =>
       items.split('*', 2)[0] === 'Brands'
         ? items.split('*', 2)[1]
         : parseInt(items.split('*', 2)[1])
@@ -42,7 +52,7 @@ const checkMultipleParamsHelper = (array, subFilter) => {
     const brands = [...subFilter].filter((item) => typeof item === 'string')
     const prices = [...subFilter].filter((item) => typeof item === 'number')
 
-    const brandFilter = array.filter((product) => {
+    const brandFilter = array.filter((product: any) => {
       if (
         brands.find(
           (value) => value.toUpperCase() === product.brand.toUpperCase()
@@ -58,20 +68,24 @@ const checkMultipleParamsHelper = (array, subFilter) => {
     }
 
     const priceFilter = brandFilter.filter(
-      (product) => prices[0] >= parseInt(product.price)
+      (product: any) => prices[0] >= parseInt(product.price)
     )
 
     return priceFilter
   }
 
   return array.filter(
-    (product) =>
+    (product: any) =>
       product.brand === subFilter[0].split('*', 2)[1] ||
       parseInt(subFilter[0].split('*', 2)[1]) > parseInt(product.price)
   )
 }
 
-const filterByTagHelper = (tag, products, subFilter) => {
+const filterByTagHelper = (
+  tag: string,
+  products: Array<Product>,
+  subFilter?: any
+) => {
   const tagItems = products.filter((product) => product.tag === tag)
 
   if (!subFilter) {

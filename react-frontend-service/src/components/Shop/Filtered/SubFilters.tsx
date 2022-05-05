@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import {
   Accordion,
   AccordionSummary,
@@ -15,71 +15,90 @@ import {
 } from '@mui/material'
 import { ExpandMore } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
 import { setPagination, setSubFilters } from '../../../redux/states/urlFilters'
+import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks'
 
-const SubFilters = ({ category, subCategory, setSortBy }) => {
+type SubFiltersProps = {
+  category: string
+  subCategory: string
+  setSortBy: React.Dispatch<React.SetStateAction<string>>
+}
+
+const SubFilters = ({ category, subCategory, setSortBy }: SubFiltersProps) => {
   const navigate = useNavigate()
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.down('md'))
 
-  const language = useSelector((state) => state.language.language)
-  const languageData = useSelector((state) => state.language.languageData)
-  const subFilters = useSelector((state) => state.urlFilters.subFilters)
+  const language = useAppSelector((state) => state.language.language)
+  const languageData = useAppSelector((state) => state.language.languageData)
+  const subFilters = useAppSelector((state) => state.urlFilters.subFilters)
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
-  const loadData = (subFilter, data) => {
-    let obj = {}
+  const loadData = (subFilter: string, data: Array<string>) => {
+    let brands = new Map<string, boolean>()
     for (var items in data) {
-      obj[`${subFilter}*${data[items]}`] = false
+      brands.set(`${subFilter}*${data[items]}`, false)
     }
 
-    return obj
+    return brands
   }
 
-  const priceData = {
-    'Prices*100': false,
-    'Prices*250': false,
-    'Prices*500': false,
-    'Prices*1000': false,
-    'Prices*1500': false,
-    'Prices*10000': false,
-    'Prices*25000': false,
-    'Prices*50000': false,
-    'Prices*100000': false,
-    'Prices*150000': false,
-  }
+  const priceData = new Map<string, boolean>([
+    ['Prices*100', false],
+    ['Prices*250', false],
+    ['Prices*500', false],
+    ['Prices*1000', false],
+    ['Prices*1500', false],
+    ['Prices*10000', false],
+    ['Prices*25000', false],
+    ['Prices*50000', false],
+    ['Prices*100000', false],
+    ['Prices*150000', false],
+  ])
 
-  const [priceFilter, setPriceFilter] = useState(priceData)
-  const [brandFilter, setBrandFilter] = useState(
+  const [priceFilter, setPriceFilter] = React.useState(priceData)
+  const [brandFilter, setBrandFilter] = React.useState(
     loadData('Brands', languageData.Shop.Brands)
   )
 
-  const handleCheckFilter = (e) => {
-    // let filterCopy = [...filters]
+  console.log(brandFilter)
+
+  const handleCheckFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     let filterCopy = [...subFilters]
+
     if (e.target.checked) {
       if (e.target.name.includes('Prices')) {
         filterCopy = filterCopy.filter((item) => !item.includes('Prices'))
-        for (var key in priceFilter) {
+
+        const priceFilterCopy = new Map(priceFilter)
+        priceFilterCopy.forEach((value: boolean, key: string) => {
           if (key !== e.target.name) {
-            priceFilter[key] = false
+            priceFilterCopy.set(key, false)
           } else {
-            priceFilter[key] = true
+            priceFilterCopy.set(key, true)
           }
-        }
+        })
+
+        setPriceFilter(new Map(priceFilterCopy))
+
         filterCopy.push(e.target.name)
       } else {
-        setBrandFilter((prevState) => ({ ...prevState, [e.target.name]: true }))
+        const brandCopy = new Map(brandFilter)
+        brandCopy.set(e.target.name, true)
+        setBrandFilter(new Map(brandCopy))
         filterCopy.push(e.target.name)
       }
     } else if (e.target.name.includes('Prices') && !e.target.checked) {
-      setPriceFilter((prevState) => ({ ...prevState, [e.target.name]: false }))
+      const priceFilterCopy = new Map(priceFilter)
+      priceFilterCopy.set(e.target.name, false)
+      setPriceFilter(new Map(priceFilterCopy))
 
       filterCopy = filterCopy.filter((item) => item !== e.target.name)
     } else {
-      setBrandFilter((prevState) => ({ ...prevState, [e.target.name]: false }))
+      const brandCopy = new Map(brandFilter)
+      brandCopy.set(e.target.name, false)
+      setBrandFilter(new Map(brandCopy))
       filterCopy = filterCopy.filter((item) => item !== e.target.name)
     }
 
@@ -119,37 +138,43 @@ const SubFilters = ({ category, subCategory, setSortBy }) => {
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (subFilters.length !== 0) {
-      let brands = []
-      let price = []
+      let brands: Array<string> = []
+      let price: Array<any> = []
 
       subFilters.map((filter) =>
         filter.includes('Brands') ? brands.push(filter) : price.push(filter)
       )
 
       if (brands.length !== 0) {
-        for (var keys in brandFilter) {
-          brands.map((brand) =>
-            keys === brand
-              ? setBrandFilter((prevState) => ({ ...prevState, [brand]: true }))
-              : null
-          )
-        }
+        const brandCopy = new Map(brandFilter)
+        brandCopy.forEach((value: boolean, key: string) => {
+          brands.map((brand) => {
+            if (key === brand) {
+              brandCopy.set(key, true)
+              return null
+            }
+          })
+        })
+
+        setBrandFilter(new Map(brandCopy))
       }
 
       if (price.length !== 0) {
-        for (var key in priceFilter) {
+        const priceCopy = new Map(priceFilter)
+        priceCopy.forEach((value: boolean, key: string) => {
           if (key === price[0]) {
-            setPriceFilter((prevState) => ({ ...prevState, [price[0]]: true }))
+            priceCopy.set(key, true)
           }
-        }
+        })
+        setPriceFilter(new Map(priceCopy))
       }
-    }
 
-    if (subFilters.length === 0) {
-      setBrandFilter(loadData('Brands', languageData.Shop.Brands))
-      setPriceFilter(priceData)
+      if (subFilters.length === 0) {
+        setBrandFilter(loadData('Brands', languageData.Shop.Brands))
+        setPriceFilter(priceData)
+      }
     }
   }, [subFilters, languageData, language])
 
@@ -176,7 +201,7 @@ const SubFilters = ({ category, subCategory, setSortBy }) => {
                     control={
                       <Checkbox
                         onChange={handleCheckFilter}
-                        checked={brandFilter[`Brands*${brand}`]}
+                        checked={brandFilter.get(`Brands*${brand}`)}
                         name={`Brands*${brand}`}
                       />
                     }
@@ -199,7 +224,7 @@ const SubFilters = ({ category, subCategory, setSortBy }) => {
                     control={
                       <Checkbox
                         onChange={handleCheckFilter}
-                        checked={priceFilter[`Prices*${String(price)}`]}
+                        checked={priceFilter.get(`Prices*${price}`)}
                         name={`Prices*${String(price)}`}
                       />
                     }
@@ -217,21 +242,31 @@ const SubFilters = ({ category, subCategory, setSortBy }) => {
 
 export default SubFilters
 
-const SubFiltersMobile = ({ priceFilter, brandFilter, handleCheckFilter }) => {
-  const languageData = useSelector((state) => state.language.languageData)
-  const language = useSelector((state) => state.language.language)
+type SubFiltersMobileProps = {
+  priceFilter: Map<string, boolean>
+  brandFilter: Map<string, boolean>
+  handleCheckFilter: (e: React.ChangeEvent<HTMLInputElement>) => void
+}
 
-  const [brandAnchorEl, setBrandAnchorEl] = useState(null)
+const SubFiltersMobile = ({
+  priceFilter,
+  brandFilter,
+  handleCheckFilter,
+}: SubFiltersMobileProps) => {
+  const languageData = useAppSelector((state) => state.language.languageData)
+  const language = useAppSelector((state) => state.language.language)
+
+  const [brandAnchorEl, setBrandAnchorEl] = React.useState(null)
   const brandOpen = Boolean(brandAnchorEl)
 
-  const [priceAnchorEl, setPriceAnchorEl] = useState(null)
+  const [priceAnchorEl, setPriceAnchorEl] = React.useState(null)
   const priceOpen = Boolean(priceAnchorEl)
 
-  const handleBrandAnchor = (event) => {
+  const handleBrandAnchor = (event: any) => {
     setBrandAnchorEl(event.currentTarget)
   }
 
-  const handlePriceAnchor = (event) => {
+  const handlePriceAnchor = (event: any) => {
     setPriceAnchorEl(event.currentTarget)
   }
 
@@ -243,8 +278,8 @@ const SubFiltersMobile = ({ priceFilter, brandFilter, handleCheckFilter }) => {
     }
   }
 
-  const checkCategoryIteration = (category) => {
-    var categoryItems
+  const checkCategoryIteration = (category: string) => {
+    var categoryItems: Array<number | string> = []
     var currencySign = '$'
     switch (category) {
       case 'Brands':
@@ -271,8 +306,8 @@ const SubFiltersMobile = ({ priceFilter, brandFilter, handleCheckFilter }) => {
                 onChange={handleCheckFilter}
                 checked={
                   category === 'Brands' || category === 'ブランド'
-                    ? brandFilter[`Brands*${value}`]
-                    : priceFilter[`Prices*${value}`]
+                    ? brandFilter.get(`Brands*${value}`)
+                    : priceFilter.get(`Prices*${value}`)
                 }
                 name={
                   category === 'Brands' || category === 'ブランド'
