@@ -45,13 +45,13 @@ func CreateProduct() gin.HandlerFunc{
 
 		var product models.Product
 
-		// userType, exists := c.Get("userType")
-		// if !exists || userType != "ADMIN" {
-		// 	c.JSON(http.StatusUnauthorized, Error{
-		// 		Message: "User not authorized to access this route.",
-		// 	})
-		// 	return
-		// }
+		userType, exists := c.Get("userType")
+		if !exists || userType != "ADMIN" {
+			c.JSON(http.StatusUnauthorized, Error{
+				Message: "User not authorized to access this route.",
+			})
+			return
+		}
 
 		if err := c.BindJSON(&product); err != nil {
 			c.JSON(http.StatusBadRequest, Error{

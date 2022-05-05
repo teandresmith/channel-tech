@@ -109,8 +109,7 @@ func GetProductByName() gin.HandlerFunc{
 		language := c.Query("lang")
 
 		matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "name", Value: name}, {Key: "language", Value: language}}}}
-		// matchStage2 := bson.D{{Key: "$match", Value: bson.D{}}}
-
+		
 		showInfoCurser, err := productCollection.Aggregate(ctx, mongo.Pipeline{matchStage})
 		defer cancel()
 		if err != nil {

@@ -35,10 +35,8 @@ See channel tech here: https://channel-tech.netlify.app/
 
 ### Frontend Details
 
-The frontend is simply React.js. Originally,
-I wanted to implement React with TypeScript to help me learn it,
-but after designing the backend, I soon realized how large
-this project was going to be, so I decided to just use regular Javascript.
+The frontend is simply React. The frontend is currently in the process of being
+migrated to TypeScript.
 
 Material UI ( MUI ) was the design system used for this project.
 I do not have much experience with design so for the website's overall design,
