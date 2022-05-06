@@ -232,7 +232,7 @@ const Filtered = () => {
             }}
           >
             <Pagination
-              count={Math.ceil(products.length / pagination.productsPerPage)}
+              count={Math.ceil(products?.length / pagination.productsPerPage)}
               page={pagination.page}
               onChange={handlePagination}
               siblingCount={2}
