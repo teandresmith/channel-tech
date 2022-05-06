@@ -292,7 +292,7 @@ export const englishLinks: StaticData = {
   },
 }
 
-export const japaneseLinks = {
+export const japaneseLinks: StaticData = {
   Shop: {
     Computers: [
       'デスクトップ',

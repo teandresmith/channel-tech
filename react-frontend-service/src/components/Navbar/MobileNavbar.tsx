@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import {
   Box,
@@ -23,24 +23,32 @@ import {
   MenuRounded,
 } from '@mui/icons-material'
 import Contact from './Subcomponents/Contact'
-import { useSelector } from 'react-redux'
+import { useAppSelector } from '../../hooks/reduxHooks'
 import logo from '../../assets/images/websiteLogo.png'
 
-const MobileNavbar = ({ handleUrlLanguageChange, handleLogout }) => {
-  const cart = useSelector((state) => state.cart.value)
-  const user = useSelector((state) => state.user.user)
-  const language = useSelector((state) => state.language.language)
-  const languageData = useSelector((state) => state.language.languageData)
+type MobileNavbarProps = {
+  handleUrlLanguageChange: () => void
+  handleLogout: Function
+}
 
-  const [shopOpen, setShopOpen] = useState(false)
-  const [productOpen, setProductOpen] = useState(false)
-  const [state, setState] = useState({
+const MobileNavbar = ({
+  handleUrlLanguageChange,
+  handleLogout,
+}: MobileNavbarProps) => {
+  const cart = useAppSelector((state) => state.cart.value)
+  const user = useAppSelector((state) => state.user.user)
+  const language = useAppSelector((state) => state.language.language)
+  const languageData = useAppSelector((state) => state.language.languageData)
+
+  const [shopOpen, setShopOpen] = React.useState(false)
+  const [productOpen, setProductOpen] = React.useState(false)
+  const [state, setState] = React.useState({
     right: false,
   })
 
-  const [contactOpen, setContactOpen] = useState(false)
+  const [contactOpen, setContactOpen] = React.useState(false)
 
-  const toggleDrawer = (anchor, open) => (event) => {
+  const toggleDrawer = (anchor: any, open: boolean) => (event: any) => {
     if (event.type === 'keydown') {
       return
     }
@@ -48,10 +56,10 @@ const MobileNavbar = ({ handleUrlLanguageChange, handleLogout }) => {
     setState({ ...state, [anchor]: open })
   }
 
-  const [profileAnchorEl, setProfileAnchorEl] = useState(null)
+  const [profileAnchorEl, setProfileAnchorEl] = React.useState(null)
   let profileOpen = Boolean(profileAnchorEl)
 
-  const handleProfileAnchor = (event) => {
+  const handleProfileAnchor = (event: any) => {
     setProfileAnchorEl(event.currentTarget)
   }
 
@@ -59,8 +67,8 @@ const MobileNavbar = ({ handleUrlLanguageChange, handleLogout }) => {
     setProfileAnchorEl(null)
   }
 
-  const checkShopCategories = (category) => {
-    var categoryItems
+  const checkShopCategories = (category: string) => {
+    var categoryItems: Array<string> = []
     var lang = language
 
     switch (category) {
@@ -109,7 +117,7 @@ const MobileNavbar = ({ handleUrlLanguageChange, handleLogout }) => {
             sx={{ justifyContent: 'space-between', width: '100%' }}
           >
             <Box
-              component={Link}
+              component={Link as React.ElementType}
               to='/'
               variant='h5'
               sx={{
@@ -128,7 +136,7 @@ const MobileNavbar = ({ handleUrlLanguageChange, handleLogout }) => {
               component='div'
               sx={{ display: 'flex', justifyContent: 'center' }}
             >
-              {Object.keys(user).length !== 0 && (
+              {user !== null && (
                 <>
                   <IconButton
                     onClick={handleProfileAnchor}
@@ -144,8 +152,8 @@ const MobileNavbar = ({ handleUrlLanguageChange, handleLogout }) => {
                     onClose={handleClose}
                     onClick={handleClose}
                   >
-                    <MenuItem component={Link} to={`/user/${user.userId}`}>
-                      {user.firstName}'s Profile
+                    <MenuItem component={Link} to={`/user/${user?.userId}`}>
+                      {user?.firstName}'s Profile
                     </MenuItem>
                     <MenuItem onClick={() => handleLogout()}>Logout</MenuItem>
                   </Menu>
@@ -250,7 +258,7 @@ const MobileNavbar = ({ handleUrlLanguageChange, handleLogout }) => {
                     >
                       <ListItemText primary='About' />
                     </ListItemButton>
-                    {Object.keys(user).length === 0 && (
+                    {user === null && (
                       <ListItemButton
                         onClick={toggleDrawer('right', false)}
                         component={Link}

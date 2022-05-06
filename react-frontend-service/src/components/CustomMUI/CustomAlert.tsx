@@ -3,7 +3,7 @@ import React from 'react'
 
 type CustomAlertProps = {
   severity: AlertColor
-  sx: SxProps<Theme>
+  sx?: SxProps<Theme>
   message: string
 }
 

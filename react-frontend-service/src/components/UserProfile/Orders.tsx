@@ -88,7 +88,7 @@ const Orders = ({ userQueryData }: OrderProps) => {
                       {language === 'en' ? 'Date Ordered' : '注文した日付'}
                     </Typography>
                     <Typography variant='body1'>
-                      {order.createdAt.split('T')[0]}
+                      {order?.createdAt?.split('T')[0]}
                     </Typography>
                   </Box>
                 </Stack>
@@ -206,7 +206,7 @@ const MobileOrderView = ({ userQueryData }: OrderProps) => {
             <Box component='div'>
               <Typography variant='body1'>
                 {language === 'en' ? 'Date Ordered: ' : '注文した日付: '}{' '}
-                {order.createdAt.split('T')[0]}
+                {order?.createdAt?.split('T')[0]}
               </Typography>
             </Box>
           </Stack>

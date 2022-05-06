@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   AppBar,
   Toolbar,
@@ -25,7 +25,7 @@ import {
 } from 'react-router-dom'
 import MobileNavbar from './MobileNavbar'
 import Contact from './Subcomponents/Contact'
-import { useSelector, useDispatch } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { changeLanguage } from '../../redux/states/languageState'
 import { setSubFilters } from '../../redux/states/urlFilters'
 import { logout } from '../../redux/states/user'
@@ -33,10 +33,10 @@ import logo from '../../assets/images/websiteLogo.png'
 import Cookies from 'js-cookie'
 
 const Navbar = () => {
-  const [profileAnchorEl, setProfileAnchorEl] = useState(null)
+  const [profileAnchorEl, setProfileAnchorEl] = React.useState(null)
   let profileOpen = Boolean(profileAnchorEl)
 
-  const handleProfileAnchor = (event) => {
+  const handleProfileAnchor = (event: any) => {
     setProfileAnchorEl(event.currentTarget)
   }
 
@@ -48,28 +48,28 @@ const Navbar = () => {
 
   const navigate = useNavigate()
 
-  const user = useSelector((state) => state.user.user)
-  const cart = useSelector((state) => state.cart.value)
-  const language = useSelector((state) => state.language.language)
-  const languageData = useSelector((state) => state.language.languageData)
-  const urlSubFilters = useSelector((state) => state.urlFilters.subFilters)
-  const dispatch = useDispatch()
+  const user = useAppSelector((state) => state.user.user)
+  const cart = useAppSelector((state) => state.cart.value)
+  const language = useAppSelector((state) => state.language.language)
+  const languageData = useAppSelector((state) => state.language.languageData)
+  const urlSubFilters = useAppSelector((state) => state.urlFilters.subFilters)
+  const dispatch = useAppDispatch()
 
   const themes = useTheme()
   const matches = useMediaQuery(themes.breakpoints.down('md'))
 
-  const [shopAnchorEl, setShopAnchorEl] = useState(null)
-  const [productAnchorEl, setProductAnchorEl] = useState(null)
+  const [shopAnchorEl, setShopAnchorEl] = React.useState(null)
+  const [productAnchorEl, setProductAnchorEl] = React.useState(null)
   const shopOpen = Boolean(shopAnchorEl)
   const productOpen = Boolean(productAnchorEl)
 
-  const [contactOpen, setContactOpen] = useState(false)
+  const [contactOpen, setContactOpen] = React.useState(false)
 
-  const handleShopAnchor = (event) => {
+  const handleShopAnchor = (event: any) => {
     setShopAnchorEl(event.currentTarget)
   }
 
-  const handleProductAnchor = (event) => {
+  const handleProductAnchor = (event: any) => {
     setProductAnchorEl(event.currentTarget)
   }
 
@@ -85,11 +85,11 @@ const Navbar = () => {
     Cookies.remove('Token')
     Cookies.remove('RefreshToken')
 
-    dispatch(logout())
+    dispatch(logout(''))
   }
 
-  const checkShopCategories = (category) => {
-    var categoryItems
+  const checkShopCategories = (category: string) => {
+    var categoryItems: Array<string> = []
 
     switch (category) {
       case 'Computers':
@@ -132,24 +132,31 @@ const Navbar = () => {
       let url = '/shop?'
       if (category) {
         let categoryInfo = 'category='
+
         switch (category) {
           case 'Computers':
           case 'パソコン':
-            categoryInfo = categoryInfo.concat(
-              languageData.Shop.DataMap.Computers[category]
-            )
+            if (hasKey(languageData.Shop.DataMap.Computers, category)) {
+              categoryInfo = categoryInfo.concat(
+                languageData.Shop.DataMap.Computers[category]
+              )
+            }
             break
           case 'Phones':
           case '電話':
-            categoryInfo = categoryInfo.concat(
-              languageData.Shop.DataMap.Phones[category]
-            )
+            if (hasKey(languageData.Shop.DataMap.Phones, category)) {
+              categoryInfo = categoryInfo.concat(
+                languageData.Shop.DataMap.Phones[category]
+              )
+            }
+
             break
           case 'Entertainment':
           case '電気機器':
-            categoryInfo = categoryInfo.concat(
-              languageData.Shop.DataMap.Entertainment[category]
-            )
+            if (hasKey(languageData.Shop.DataMap.Entertainment, category))
+              categoryInfo = categoryInfo.concat(
+                languageData.Shop.DataMap.Entertainment[category]
+              )
             break
           case 'Newest Products':
           case 'Top Rated Products':
@@ -157,9 +164,12 @@ const Navbar = () => {
           case '一番商品':
           case 'おすすめ商品':
           case '新しい商品':
-            categoryInfo = categoryInfo.concat(
-              languageData.Shop.DataMap.Products[category]
-            )
+            if (hasKey(languageData.Shop.DataMap.Products, category)) {
+              categoryInfo = categoryInfo.concat(
+                languageData.Shop.DataMap.Products[category]
+              )
+            }
+
             break
           default:
             break
@@ -172,21 +182,24 @@ const Navbar = () => {
         switch (category) {
           case 'Computers':
           case 'パソコン':
-            categoryInfo = categoryInfo.concat(
-              languageData.Shop.DataMap.Computers[subcategory]
-            )
+            if (hasKey(languageData.Shop.DataMap.Computers, subcategory))
+              categoryInfo = categoryInfo.concat(
+                languageData.Shop.DataMap.Computers[subcategory]
+              )
             break
           case 'Phones':
           case '電話':
-            categoryInfo = categoryInfo.concat(
-              languageData.Shop.DataMap.Phones[subcategory]
-            )
+            if (hasKey(languageData.Shop.DataMap.Phones, subcategory))
+              categoryInfo = categoryInfo.concat(
+                languageData.Shop.DataMap.Phones[subcategory]
+              )
             break
           case 'Entertainment':
           case '電気機器':
-            categoryInfo = categoryInfo.concat(
-              languageData.Shop.DataMap.Entertainment[subcategory]
-            )
+            if (hasKey(languageData.Shop.DataMap.Entertainment, subcategory))
+              categoryInfo = categoryInfo.concat(
+                languageData.Shop.DataMap.Entertainment[subcategory]
+              )
             break
           case 'Newest Products':
           case 'Top Rated Products':
@@ -194,9 +207,10 @@ const Navbar = () => {
           case '一番商品':
           case 'おすすめ商品':
           case '新しい商品':
-            categoryInfo = categoryInfo.concat(
-              languageData.Shop.DataMap.Products[subcategory]
-            )
+            if (hasKey(languageData.Shop.DataMap.Products, subcategory))
+              categoryInfo = categoryInfo.concat(
+                languageData.Shop.DataMap.Products[subcategory]
+              )
             break
           default:
             break
@@ -211,7 +225,8 @@ const Navbar = () => {
           if (splitFilters[i].includes('Prices')) {
             let subFilterCopy = [...urlSubFilters]
             let price = splitFilters[i].split('*')[1]
-            price = languageData.Shop.DataMap.Prices[price]
+            if (hasKey(languageData.Shop.DataMap.Prices, price))
+              price = languageData.Shop.DataMap.Prices[price]
             splitFilters[i] = `Prices*${price}`
             subFilterCopy[i] = `Prices*${price}`
             dispatch(
@@ -234,6 +249,10 @@ const Navbar = () => {
     dispatch(changeLanguage(language === 'en' ? 'jp' : 'en'))
   }
 
+  function hasKey<O>(obj: O, key: PropertyKey): key is keyof O {
+    return key in obj
+  }
+
   return (
     <>
       {matches ? (
@@ -250,7 +269,7 @@ const Navbar = () => {
                 sx={{ justifyContent: 'space-between', width: '100%' }}
               >
                 <Box
-                  component={Link}
+                  component={Link as React.ElementType}
                   to='/'
                   variant='h5'
                   sx={{
@@ -348,7 +367,7 @@ const Navbar = () => {
                     </Tooltip>
                   )}
 
-                  {Object.keys(user).length !== 0 ? (
+                  {user !== null ? (
                     <>
                       <IconButton
                         onClick={handleProfileAnchor}

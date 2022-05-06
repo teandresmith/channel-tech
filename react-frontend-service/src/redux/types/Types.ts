@@ -61,7 +61,7 @@ export type User = {
 }
 
 export type Order = {
-  _id: string
+  _id?: string
   firstName: string
   lastname: string
   paymentMethod: string
@@ -70,8 +70,8 @@ export type Order = {
   totalPrice: number
   isPaid: string
   orderId: string
-  createdAt: string
-  updatedAt: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 export type Address = {

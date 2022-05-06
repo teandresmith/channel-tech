@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import {
   Dialog,
@@ -9,14 +9,25 @@ import {
   Button,
 } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
-import ReactHookFormTextField from '../../CustomInputs/ReactHookFormTextField'
 import CustomAlert from '../../CustomMUI/CustomAlert'
 import { useSendMessageMutation } from '../../../redux/services/userAPI'
+import { MHFTextField } from 'mui-hook-form-mhf'
 
-const Contact = ({ open, setOpen }) => {
-  const methods = useForm()
-  const [message, setMessage] = useState('')
-  const [buttonLoading, setButtonLoading] = useState(false)
+type FormData = {
+  name: string
+  email: string
+  message: string
+}
+
+type ContactProps = {
+  open: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const Contact = ({ open, setOpen }: ContactProps) => {
+  const methods = useForm<FormData>()
+  const [message, setMessage] = React.useState('')
+  const [buttonLoading, setButtonLoading] = React.useState(false)
 
   const [sendMessage] = useSendMessageMutation()
 
@@ -24,9 +35,9 @@ const Contact = ({ open, setOpen }) => {
     setOpen(false)
   }
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: FormData) => {
     setButtonLoading(true)
-    let { error } = await sendMessage(data)
+    let error = await sendMessage(data)
 
     setButtonLoading(false)
 
@@ -56,7 +67,7 @@ const Contact = ({ open, setOpen }) => {
                 Please fill out the form below and we will try to reach out to
                 you ASAP!
               </DialogContentText>
-              <ReactHookFormTextField
+              <MHFTextField
                 defaultValue='Anon'
                 name='name'
                 control={methods.control}
@@ -70,7 +81,7 @@ const Contact = ({ open, setOpen }) => {
                 color='secondary'
               />
 
-              <ReactHookFormTextField
+              <MHFTextField
                 name='email'
                 control={methods.control}
                 defaultValue=''
@@ -84,14 +95,13 @@ const Contact = ({ open, setOpen }) => {
                 color='secondary'
               />
 
-              <ReactHookFormTextField
+              <MHFTextField
                 name='message'
                 control={methods.control}
                 defaultValue=''
                 margin='dense'
                 id='message'
                 label='Message'
-                type='message'
                 required
                 fullWidth
                 multiline

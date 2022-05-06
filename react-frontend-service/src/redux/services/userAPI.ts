@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const userAPI = createApi({
   reducerPath: 'userAPI',
+  tagTypes: ['User'],
   baseQuery: fetchBaseQuery({
     baseUrl: `${process.env.REACT_APP_BACKEND_DOMAIN}/api`,
   }),
@@ -26,12 +27,11 @@ export const userAPI = createApi({
     }),
 
     sendMessage: build.mutation({
-      query: (message) =>
-        build.mutation({
-          url: '/contact',
-          method: 'POST',
-          body: message,
-        }),
+      query: (message) => ({
+        url: '/contact',
+        method: 'POST',
+        body: message,
+      }),
     }),
   }),
 })

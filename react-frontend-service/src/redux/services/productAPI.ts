@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Product } from '../types/Types'
 
 export const productAPI = createApi({
   reducerPath: 'productAPI',
+  tagTypes: ['Products'],
   baseQuery: fetchBaseQuery({
     baseUrl: `${process.env.REACT_APP_BACKEND_DOMAIN}/api`,
   }),
@@ -11,8 +11,8 @@ export const productAPI = createApi({
       query: (language) => ({
         url: `/products?lang=${language}`,
         method: 'GET',
+        providesTags: 'Products',
       }),
-      providesTags: ['Products'],
     }),
 
     getProductByID: build.query({
@@ -46,7 +46,7 @@ export const productAPI = createApi({
     }),
 
     updateProduct: build.mutation({
-      query: (product, productID) => ({
+      query: ({ product, productID }) => ({
         url: `/admin/products/${productID}`,
         method: 'PATCH',
         body: product,
@@ -63,12 +63,6 @@ export const productAPI = createApi({
       }),
       invalidatesTags: ['Products'],
     }),
-
-    getProductsByParams: build.query({
-      query: (sortBy, sortOrder, numberOfProductsOnPage, numberOfPages) =>
-        `/products?sortBy=${sortBy}&sortOrder=${sortOrder}&numberOfProductsOnPage=${numberOfProductsOnPage}$numberOfPages=${numberOfPages}`,
-      providesTags: ['Products'],
-    }),
   }),
 })
 
@@ -79,6 +73,5 @@ export const {
   useCreateReviewMutation,
   useCreateProductMutation,
   useDeleteProductMutation,
-  useGetProductsByParamsQuery,
   useUpdateProductMutation,
 } = productAPI

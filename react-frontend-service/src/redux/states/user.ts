@@ -4,7 +4,7 @@ import { User } from '../types/Types'
 const user =
   localStorage.getItem('user') !== null
     ? JSON.parse(localStorage.getItem('user') as string)
-    : {}
+    : null
 
 const initialState: User = {
   user: user,
@@ -18,7 +18,7 @@ export const userSlice = createSlice({
       state.user = action.payload.user
     },
     logout: (state, action) => {
-      state.user = {}
+      state.user = null
     },
   },
 })
