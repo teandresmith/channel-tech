@@ -62,8 +62,6 @@ const SubFilters = ({ category, subCategory, setSortBy }: SubFiltersProps) => {
     loadData('Brands', languageData.Shop.Brands)
   )
 
-  console.log(brandFilter)
-
   const handleCheckFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     let filterCopy = [...subFilters]
 
