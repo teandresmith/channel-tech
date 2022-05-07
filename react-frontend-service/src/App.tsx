@@ -41,11 +41,11 @@ const App = () => {
               <Navbar />
               <div style={{ marginTop: '100px' }}>
                 <Routes>
-                  <Route path='/' element={<Home data={data.result} />} />
+                  <Route path='/' element={<Home data={data?.result} />} />
                   <Route path='/login' element={<Login />} />
                   <Route path='/register' element={<Register />} />
                   <Route path='/about' element={<About />} />
-                  <Route path='/shop' element={<Shop data={data.result} />} />
+                  <Route path='/shop' element={<Shop data={data?.result} />} />
                   <Route path='/products/:name' element={<ProductDetails />} />
                   <Route path='/cart' element={<Cart />} />
                   <Route path='/user/:userid' element={<UserProfile />} />

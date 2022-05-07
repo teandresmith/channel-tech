@@ -110,7 +110,7 @@ const Login = () => {
                     control={methods.control}
                     margin='dense'
                     label={language === 'en' ? 'Password' : 'パスワード'}
-                    id={'Password'}
+                    id={'password'}
                     variant='outlined'
                     color='secondary'
                     type='password'
