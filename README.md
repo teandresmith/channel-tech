@@ -26,7 +26,7 @@ See channel tech here: https://channel-tech.netlify.app/
 | ---------------- | -------------------------- |
 | Frontend         | React w/ TypeScript        |
 | FE Testing       | Cypress/React-Testing Lib  |
-| Design System    | Material Design            |
+| Design System    | Material-UI                |
 | State Management | Redux Toolkit              |
 | Database         | MongoDB                    |
 | ORM              | golang-mongodb-driver      |
