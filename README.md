@@ -24,19 +24,19 @@ See channel tech here: https://channel-tech.netlify.app/
 
 | channel tech     | tech stack                 |
 | ---------------- | -------------------------- |
-| Frontend         | React.js                   |
+| Frontend         | React w/ TypeScript        |
+| FE Testing       | Cypress/React-Testing Lib  |
 | Design System    | Material Design            |
 | State Management | Redux Toolkit              |
 | Database         | MongoDB                    |
-| ORM              | golang-mongodb             |
+| ORM              | golang-mongodb-driver      |
 | Web Server       | Golang - Gin-Gonic         |
 | Deployment Env   | Netlify / GCP              |
 | Auth             | email/password + JWT Token |
 
 ### Frontend Details
 
-The frontend is simply React. The frontend is currently in the process of being
-migrated to TypeScript.
+The frontend is simply React. The frontend is almost fully migrated to TypeScript.
 
 Material UI ( MUI ) was the design system used for this project.
 I do not have much experience with design so for the website's overall design,
