@@ -16,18 +16,18 @@ import (
 )
 
 type LoginUser struct {
-	Email    	string 		`bson:"email" json:"email"`
-	Password 	string 		`bson:"Password" json:"Password"`
+	Email    string `bson:"email" json:"email"`
+	Password string `bson:"Password" json:"Password"`
 }
 
 type Error struct {
-	Message		string		`bson:"message" json:"message"`
-	Error		string		`bson:"error" json:"error"`
+	Message string `bson:"message" json:"message"`
+	Error   string `bson:"error" json:"error"`
 }
 
-type Response struct{
-	Message		string		`bson:"message" json:"message"`
-	Result		interface{}	`bson:"result" json:"result"`
+type Response struct {
+	Message string      `bson:"message" json:"message"`
+	Result  interface{} `bson:"result" json:"result"`
 }
 
 var userCollection *mongo.Collection = database.OpenCollection(database.Client, "User")
@@ -51,7 +51,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		WriteError(w, Error{
 			Message: "There was an error while binding body request data",
-			Error: err.Error(),
+			Error:   err.Error(),
 		}, http.StatusBadRequest)
 		return
 	}
@@ -59,7 +59,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	if validateErr := validate.Struct(body); validateErr != nil {
 		WriteError(w, Error{
 			Message: "There wasn an error while validating body request data",
-			Error: validateErr.Error(),
+			Error:   validateErr.Error(),
 		}, http.StatusBadRequest)
 		return
 	}
@@ -83,7 +83,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	if hashErr != nil {
 		WriteError(w, Error{
 			Message: "There was an error while hashing password",
-			Error: hashErr.Error(),
+			Error:   hashErr.Error(),
 		}, http.StatusInternalServerError)
 		return
 	}
@@ -97,7 +97,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	if tokenGenerationErr != nil {
 		WriteError(w, Error{
 			Message: "There was an error while generating tokens",
-			Error: tokenGenerationErr.Error(),
+			Error:   tokenGenerationErr.Error(),
 		}, http.StatusInternalServerError)
 		return
 	}
@@ -110,37 +110,14 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	if insertErr != nil {
 		WriteError(w, Error{
 			Message: "There was an error while inserting an object in the User Collection",
-			Error: insertErr.Error(),
+			Error:   insertErr.Error(),
 		}, http.StatusInternalServerError)
 		return
 	}
 
-	tokenCookie := &http.Cookie {
-		Name: "Token",
-		Path: "/",
-		Value: token,
-		Expires: time.Now().Local().Add(20*time.Minute),
-		MaxAge: 20*60,
-		SameSite: http.SameSiteNoneMode,
-		Secure: true,
-	}
-
-	refreshCookie := &http.Cookie {
-		Name: "RefreshToken",
-		Path: "/",
-		Value: refreshToken,
-		Expires: time.Now().Local().Add(3*time.Hour),
-		MaxAge: 3600*3,
-		SameSite: http.SameSiteNoneMode,
-		Secure: true,
-	}
-
-	http.SetCookie(w, tokenCookie)
-	http.SetCookie(w, refreshCookie)
-
 	WriteResponse(w, Response{
 		Message: "Registration Successful",
-		Result: body,
+		Result:  body,
 	}, http.StatusOK)
 
 }
@@ -148,7 +125,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 func Login(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	
+
 	var body LoginUser
 	w.Header().Set("Content-Type", "application/json")
 
@@ -156,7 +133,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		WriteError(w, Error{
 			Message: "There was an error while binding request body data",
-			Error: err.Error(),
+			Error:   err.Error(),
 		}, http.StatusBadRequest)
 		return
 	}
@@ -168,7 +145,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	if findErr != nil {
 		WriteError(w, Error{
 			Message: "There was an error while querying the User Collection",
-			Error: findErr.Error(),
+			Error:   findErr.Error(),
 		}, http.StatusInternalServerError)
 		return
 	}
@@ -176,7 +153,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	if validPasswordErr := helpers.ValidateHashPassword(*foundUser.Password, body.Password); validPasswordErr != nil {
 		WriteError(w, Error{
 			Message: "Something went wrong when trying to validate password",
-			Error: validPasswordErr.Error(),
+			Error:   validPasswordErr.Error(),
 		}, http.StatusUnauthorized)
 		return
 	}
@@ -185,7 +162,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	if tokenErr != nil {
 		WriteError(w, Error{
 			Message: "There was an error while generating JWT tokens",
-			Error: tokenErr.Error(),
+			Error:   tokenErr.Error(),
 		}, http.StatusInternalServerError)
 		return
 	}
@@ -194,77 +171,48 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	if updateErr != nil {
 		WriteError(w, Error{
 			Message: "There was an error while updating user token",
-			Error: updateErr.Error(),
+			Error:   updateErr.Error(),
 		}, http.StatusInternalServerError)
 		return
 	}
 
-	tokenCookie := &http.Cookie {
-		Name: "Token",
-		Path: "/",
-		Value: token,
-		Expires: time.Now().Local().Add(20*time.Minute),
-		MaxAge: 20*60,
-		SameSite: http.SameSiteNoneMode,
-		Secure: true,
-	}
-
-	refreshCookie := &http.Cookie {
-		Name: "RefreshToken",
-		Path: "/",
-		Value: refreshToken,
-		Expires: time.Now().Local().Add(3*time.Hour),
-		MaxAge: 3600*3,
-		SameSite: http.SameSiteNoneMode,
-		Secure: true,
-	}
-
-	http.SetCookie(w, tokenCookie)
-	http.SetCookie(w, refreshCookie)
-
-	
 	WriteResponse(w, Response{
 		Message: "Login Successful",
-		Result: foundUser,
+		Result:  foundUser,
 	}, http.StatusOK)
-	
+
 }
 
 func RefreshToken(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	var body struct{
-		Token 	string 	`bson:"refreshToken" json:"refreshToken"`
+	var body struct {
+		Token string `bson:"refreshToken" json:"refreshToken"`
 	}
 
 	err := json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
 		WriteError(w, Error{
 			Message: "There was an error while decoding request body data",
-			Error: err.Error(),
+			Error:   err.Error(),
 		}, http.StatusBadRequest)
 		return
 	}
-
-	
 
 	claims, refreshErr := helpers.ValidateAndRefreshExpiredToken(body.Token)
 	if refreshErr != "" {
 		WriteError(w, Error{
 			Message: "There was an error while validating and generating new tokens",
-			Error: refreshErr,
+			Error:   refreshErr,
 		}, http.StatusInternalServerError)
 		return
 	}
 
-
 	WriteResponse(w, Response{
 		Message: "New Tokens Updated Successfully",
-		Result: claims,
+		Result:  claims,
 	}, http.StatusOK)
-} 
-
-
+}
 
 func WriteError(w http.ResponseWriter, err Error, statusCode int) {
 	json.NewEncoder(w).Encode(&err)
